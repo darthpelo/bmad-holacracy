@@ -2,6 +2,22 @@
 
 **BMAD** (Breakthrough Method for Agile AI-Driven Development) is a framework of 12 specialized AI agents that guide you through structured workflows for software, business, and personal projects.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Agents Reference](#agents-reference)
+- [Supported Domains](#supported-domains)
+- [Domain Examples](#domain-examples)
+- [Workflow Orchestrators](#workflow-orchestrators)
+- [Context Sharding](#context-sharding)
+- [Output Structure](#output-structure)
+- [Plugin Structure](#plugin-structure)
+- [Customization](#customization)
+- [BMAD Principles](#bmad-principles)
+- [References](#references)
+- [License](#license)
+
 ## Installation
 
 ```bash
