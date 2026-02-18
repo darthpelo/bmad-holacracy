@@ -221,6 +221,10 @@ claude-plugin-bmad/
 └── LICENSE
 ```
 
+## Customization
+
+Want to add new skills, workflows, commands, templates, or domains? See the **[Customization Guide](docs/CUSTOMIZATION.md)** for step-by-step instructions with copy-paste templates.
+
 ## BMAD Principles
 
 - **Progressive Disclosure**: Each agent sees only the current step
