@@ -24,10 +24,14 @@
 claude plugin install ./claude-plugin-bmad
 ```
 
-Or install directly from GitHub:
+Or install from GitHub:
 
 ```bash
-claude plugin install github:alessioroberto/claude-plugin-bmad
+# 1. Add the repository as a marketplace
+/plugin marketplace add darthpelo/claude-plugin-bmad
+
+# 2. Install the plugin from the marketplace
+/plugin install bmad-method@darthpelo-claude-plugin-bmad
 ```
 
 After installation, all 12 skills become available as slash commands in any project.
