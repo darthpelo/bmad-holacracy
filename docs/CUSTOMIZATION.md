@@ -37,7 +37,9 @@ claude-plugin-bmad/
 
 - **Skills** (`skills/*/SKILL.md`) are the primary extension point. Each skill directory is auto-discovered and becomes a `/skill-name` slash command.
 - **Commands** (`commands/*.md`) are simpler slash commands without frontmatter or agent configuration.
-- **Resources** (`resources/`) hold shared assets (templates, scripts) that skills reference via `${CLAUDE_PLUGIN_ROOT}/resources/...`.
+- **Resources** (`resources/`) hold shared assets — `soul.md` (circle principles), templates, scripts — referenced via `${CLAUDE_PLUGIN_ROOT}/resources/...`.
+- **soul.md** (`resources/soul.md`) defines shared principles loaded by every role in the circle.
+- **Config** (`resources/templates/config-example.yaml`) is a per-project config template users copy to `.claude/bmad-output/bmad-config.yaml`.
 - **Domain detection** is a shared pattern: every skill detects `software`, `business`, `personal`, or `general` from files in the working directory.
 
 ---
@@ -56,27 +58,36 @@ There are three types of skills in BMAD, each with different frontmatter:
 
 | Type | `context` | `agent` | When to use |
 |------|-----------|---------|-------------|
-| **Agent** | `fork` | `Explore`, `Plan`, `qa`, `general-purpose` | Independent workflow phase (analyst, pm, dev...) |
-| **Orchestrator** | `same` | `general-purpose` | Multi-step workflow that guides the user through multiple agents |
+| **Role** | `fork` | `Explore`, `Plan`, `qa`, `general-purpose` | Independent workflow phase (scope, prioritize, impl...) |
+| **Orchestrator** | `same` | `general-purpose` | Multi-step workflow that guides the user through multiple roles |
 | **Utility** | `same` or `fork` | `general-purpose` | Tool or helper (init, shard...) |
 
 ### Step 3: Write SKILL.md
 
-#### Agent Skill Template
+#### Role Skill Template
 
-Use this for a new workflow phase (e.g., a "Data Engineer" or "Technical Writer" agent):
+Use this for a new workflow phase (e.g., a "Data Steward" or "Documentation Owner" role):
 
 ```yaml
 ---
 name: bmad-<name>
-description: BMAD <Role> - <what it does>. For <domains> (<specifics>). Use after <prerequisite>.
+description: <Role purpose>. For <domains> (<specifics>). Use after <prerequisite>.
 context: fork
 agent: Plan
 ---
 
 # BMAD <Role Title>
 
-You are the **<Role>** of the BMAD-METHOD framework. <Your purpose in one sentence.>
+You energize the **<Role Title>** role in the BMAD circle. <Your purpose in one sentence.>
+
+## Shared Principles
+
+Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md`. Key principle for this role:
+- **<Most relevant principle>**: <why it matters for this role>
+
+## Project Config
+
+Check for per-project config at `.claude/bmad-output/bmad-config.yaml`. If found, apply overrides for this role. If not found, use defaults.
 
 ## Domain Detection
 
@@ -93,7 +104,7 @@ Detect the project domain by analyzing files in the current directory:
 ## Domain-Specific Behavior
 
 ### Software Development
-**Focus**: <what this agent does for software>
+**Focus**: <what this role does for software>
 **Output**: `<filename>.md` with:
 - <Section 1>
 - <Section 2>
@@ -101,7 +112,7 @@ Detect the project domain by analyzing files in the current directory:
 **Template**: `${CLAUDE_PLUGIN_ROOT}/resources/templates/software/<filename>.md`
 
 ### Business Strategy
-**Focus**: <what this agent does for business>
+**Focus**: <what this role does for business>
 **Output**: `<filename>.md` with:
 - <Section 1>
 - <Section 2>
@@ -109,7 +120,7 @@ Detect the project domain by analyzing files in the current directory:
 **Template**: `${CLAUDE_PLUGIN_ROOT}/resources/templates/business/<filename>.md`
 
 ### Personal Goals
-**Focus**: <what this agent does for personal>
+**Focus**: <what this role does for personal>
 **Output**: `<filename>.md` with:
 - <Section 1>
 - <Section 2>
@@ -121,12 +132,7 @@ Detect the project domain by analyzing files in the current directory:
 1. **Validate input**: Check prerequisite artifacts exist
 2. **<Phase-specific step>**: <Description>
 3. **Generate document**: Write to `.claude/bmad-output/<filename>.md`
-4. **Handoff**: "<Output> completed. Next: /bmad-<next-agent> for <next phase>."
-
-## BMAD Principles
-- Human-in-the-loop: ask questions, don't assume
-- Progressive disclosure: focus only on your phase
-- Context sharding: keep output concise (max 2000 tokens)
+4. **Handoff**: "<Output> completed. Next: /bmad-<next-role> for <next phase>."
 ```
 
 #### Utility Skill Template
@@ -171,24 +177,33 @@ Reference them in your SKILL.md with:
 **Template**: `${CLAUDE_PLUGIN_ROOT}/resources/templates/<domain>/<filename>.md`
 ```
 
-### Example: Adding a "Technical Writer" Agent
+### Example: Adding a "Documentation Owner" Role
 
 ```bash
-mkdir skills/bmad-writer
+mkdir skills/bmad-docs
 ```
 
-`skills/bmad-writer/SKILL.md`:
+`skills/bmad-docs/SKILL.md`:
 ```yaml
 ---
-name: bmad-writer
-description: BMAD Technical Writer - generates documentation, API docs, user guides. For software (API reference), business (SOPs), personal (knowledge base). Use after Dev.
+name: bmad-docs
+description: Documentation generation from implementation artifacts. For software (API reference), business (SOPs), personal (knowledge base). Use after impl.
 context: fork
 agent: general-purpose
 ---
 
-# BMAD Technical Writer
+# BMAD Documentation Owner
 
-You are the **Technical Writer** of the BMAD-METHOD framework. You create clear, structured documentation from implementation artifacts.
+You energize the **Documentation Owner** role in the BMAD circle. You create clear, structured documentation from implementation artifacts.
+
+## Shared Principles
+
+Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md`. Key principle for this role:
+- **Impact Over Activity**: document what matters, skip what doesn't
+
+## Project Config
+
+Check for per-project config at `.claude/bmad-output/bmad-config.yaml`. If found, apply overrides. If not found, use defaults.
 
 ## Domain Detection
 
@@ -200,33 +215,21 @@ Detect the project domain by analyzing files in the current directory:
 
 ## Input
 
-- Read implementation artifacts in `.claude/bmad-output/` and source code. If no artifacts found: "No implementation found. Run /bmad-dev first."
+- Read implementation artifacts in `.claude/bmad-output/` and source code. If no artifacts found: "No implementation found. Run /bmad-impl first."
 
 ## Domain-Specific Behavior
 
 ### Software Development
 **Focus**: API docs, README, setup guides, architecture docs
-**Output**: `documentation.md` with:
-- Getting Started guide
-- API Reference
-- Architecture Overview
-- Deployment Guide
+**Output**: `documentation.md`
 
 ### Business Strategy
 **Focus**: Standard operating procedures, process documentation
-**Output**: `operations-guide.md` with:
-- Process Documentation
-- Role Descriptions
-- Decision Trees
-- FAQ
+**Output**: `operations-guide.md`
 
 ### Personal Goals
 **Focus**: Knowledge base, reference guides, checklists
-**Output**: `reference-guide.md` with:
-- Quick Reference Cards
-- Checklists
-- Resource Links
-- Progress Templates
+**Output**: `reference-guide.md`
 
 ## Process
 
@@ -234,18 +237,13 @@ Detect the project domain by analyzing files in the current directory:
 2. **Identify audience**: Ask who will read this documentation
 3. **Generate docs**: Write structured documentation appropriate to the domain
 4. **Handoff**: "Documentation completed. Review in `.claude/bmad-output/`."
-
-## BMAD Principles
-- Audience-first: write for the reader, not the writer
-- Progressive disclosure: overview first, details on demand
-- Human-in-the-loop: ask about audience and scope before writing
 ```
 
 ---
 
 ## Adding a New Orchestrator
 
-Orchestrators guide users through multi-step workflows. They run in the main conversation (`context: same`) and prompt the user to invoke individual agents at each step.
+Orchestrators guide users through multi-step workflows. They run in the main conversation (`context: same`) and prompt the user to invoke individual roles at each step.
 
 ### Orchestrator Template
 
@@ -337,7 +335,7 @@ File: `.claude/bmad-output/session-state.json`
 ### Key Design Rules for Orchestrators
 
 1. **Use `context: same`** — orchestrators must run in the main conversation to guide the user through multiple agent invocations.
-2. **Cannot invoke skills directly** — orchestrators prompt the user: "Please invoke: `/bmad-analyst`". The user runs each agent manually.
+2. **Cannot invoke skills directly** — orchestrators prompt the user: "Please invoke: `/bmad-scope`". The user runs each role manually.
 3. **Persist state** — write to `session-state.json` after every checkpoint so workflows can be paused and resumed.
 4. **Verify artifacts** — after each agent completes, check that the expected output file exists in `.claude/bmad-output/`.
 
@@ -552,6 +550,13 @@ model: default                 # Override model for this skill.
 - Output files: `<descriptive-name>.md` (e.g., `test-report.md`, `sprint-plan.md`)
 - Templates: match the output filename
 
+### Holacracy pattern
+
+Every role skill must:
+1. Open with: `You energize the **<Role Title>** role in the BMAD circle.`
+2. Load shared principles: `Read the BMAD circle principles from ${CLAUDE_PLUGIN_ROOT}/resources/soul.md`
+3. Check per-project config: `Check for per-project config at .claude/bmad-output/bmad-config.yaml`
+
 ### Workflow sequence
 
 Skills signal the next step via handoff messages:
@@ -575,7 +580,7 @@ All skills write artifacts to `.claude/bmad-output/`. Orchestrators manage `sess
     "current_step": "step-name",
     "completed_steps": ["step1", "step2"],
     "checkpoints": [
-      {"step": "analyst", "timestamp": "...", "status": "completed", "artifact": "project-brief.md"}
+      {"step": "scope", "timestamp": "...", "status": "completed", "artifact": "project-brief.md"}
     ]
   }
 }
@@ -588,7 +593,7 @@ Skills check for prerequisite artifacts:
 ```markdown
 ## Input
 
-- Read requirements in `.claude/bmad-output/` (one of: `PRD.md`, `business-requirements.md`, `action-plan.md`). If not found: "Requirements missing. Run /bmad-pm"
+- Read requirements in `.claude/bmad-output/` (one of: `PRD.md`, `business-requirements.md`, `action-plan.md`). If not found: "Requirements missing. Run /bmad-prioritize"
 ```
 
 ### Domain detection (copy-paste block)
