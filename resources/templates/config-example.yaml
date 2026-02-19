@@ -1,0 +1,45 @@
+# BMAD Project Configuration
+# Copy to .claude/bmad-output/bmad-config.yaml and customize
+
+# Override detected domain (auto-detect if omitted)
+# domain: software
+
+# Quality gates
+quality:
+  # Security P0 blocks implementation (default: true)
+  security_p0_blocks: true
+  # QA rejection loops back to implementer (default: true)
+  qa_rejection_loops: true
+  # QA mode: "planning" | "verification" | "both" (default: both)
+  qa_mode: both
+
+# Workflow customization
+workflow:
+  # Optional phases enabled by default in greenfield
+  default_optional_phases:
+    ux: true
+    security: true
+    facilitate: true
+  # Auto-shard threshold (tokens). Set to 0 to disable
+  shard_threshold: 3000
+
+# Role overrides (customize individual role behavior)
+roles:
+  # Example: customize the architecture owner
+  # arch:
+  #   extra_instructions: |
+  #     This project uses microservices with event sourcing.
+  #     Prefer async communication between services.
+
+  # Example: customize the implementer
+  # impl:
+  #   extra_instructions: |
+  #     Use Swift 6 strict concurrency.
+  #     Follow MVVM+C architecture.
+
+# Output preferences
+output:
+  # Directory for artifacts (relative to project root)
+  dir: .claude/bmad-output
+  # Include timestamps in artifact filenames
+  timestamps: false
