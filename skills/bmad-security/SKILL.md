@@ -130,9 +130,31 @@ Detect the project domain by analyzing files in the current directory:
 7. **Generate report**: Write to `.claude/bmad-output/`
    - Use appropriate template from the detected domain
 
-8. **Handoff**:
-   - If Critical issues: "🔴 BLOCKED - Fix critical issues before proceeding. Re-audit required after fixes."
-   - If only High/Medium/Low: "Audit completed. Next: `/bmad-impl` for implementation (fix security issues in parallel)."
+8. **Handoff** (see Security Gate Decision below)
+
+## Security Gate Decision
+
+Based on findings:
+- If ANY P0 (Critical) -> verdict is **SECURITY BLOCK**
+  - Security blocks MUST be resolved before `/bmad-impl` proceeds
+  - This is enforced by the greenfield orchestrator
+- If P1 but no P0 -> verdict is **SECURITY PASS with warnings**
+- If only P2/P3 -> verdict is **SECURITY PASS**
+
+### Handoff Messages
+
+**SECURITY BLOCK**:
+> **Security Guardian — BLOCKED (P0 critical issues).**
+> These MUST be fixed before implementation.
+> Re-run `/bmad-security` after fixes.
+
+**SECURITY PASS with warnings**:
+> **Security Guardian — PASS with P1 warnings.**
+> Proceed to `/bmad-impl`; fix P1 issues in parallel.
+
+**SECURITY PASS**:
+> **Security Guardian — PASS.**
+> Proceed to `/bmad-impl` for implementation.
 
 ## Severity Levels
 
