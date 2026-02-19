@@ -7,7 +7,12 @@ agent: general-purpose
 
 # BMAD Document Sharding
 
-Implements BMAD context sharding: splits large documents into atomic "story files".
+Implements BMAD context sharding: splits large documents into atomic "story files" for focused implementation.
+
+## Shared Principles
+
+Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md`. Key principle for this role:
+- **Impact Over Activity**: load only what's needed, eliminate token waste
 
 ## Input
 
@@ -45,9 +50,9 @@ Documents to shard (automatically detected):
    ```
 
 4. **Save to**:
-   - Requirements → `.claude/bmad-output/shards/requirements/`
-   - Architecture → `.claude/bmad-output/shards/architecture/`
-   - Stories → `.claude/bmad-output/shards/stories/`
+   - Requirements -> `.claude/bmad-output/shards/requirements/`
+   - Architecture -> `.claude/bmad-output/shards/architecture/`
+   - Stories -> `.claude/bmad-output/shards/stories/`
 
 5. **Update session-state.json**:
    ```json
@@ -62,17 +67,17 @@ Documents to shard (automatically detected):
 
 ## Benefits
 
-- **Token Reduction**: 90% (Dev loads only the needed shard, not the full PRD)
+- **Token Reduction**: 90% (Implementer loads only the needed shard, not the full PRD)
 - **Focus**: One task at a time, no distractions
 - **Progressive Disclosure**: Future tasks not visible
 
 ## Post-Sharding Usage
 
 ```bash
-# Developer implements only STORY-001
-/bmad-dev STORY-001
+# Implementer works on only STORY-001
+/bmad-impl STORY-001
 
-# Developer will read ONLY:
+# Will read ONLY:
 # - .claude/bmad-output/shards/stories/STORY-001.md
 # - Any dependencies referenced in the shard
 ```
