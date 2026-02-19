@@ -1,31 +1,42 @@
 ---
 name: bmad-greenfield
-description: Orchestrates full greenfield workflow (init → analyst → pm → ux → architect → security → sm → dev → qa). Interactive with human checkpoints at each phase. Optional phases (UX, Security, SM). Resumable from any checkpoint.
+description: Orchestrates full greenfield workflow (init -> scope -> prioritize -> ux -> arch -> security -> facilitate -> impl -> qa). Interactive with human checkpoints at each phase. Optional phases (UX, Security, Facilitate). Resumable from any checkpoint.
 context: same
 agent: general-purpose
 ---
 
-# BMAD Greenfield Workflow Orchestrator
+# Greenfield Workflow Orchestrator
 
-You are the **Greenfield Orchestrator** of the BMAD-METHOD framework. You guide the user through the entire development workflow, from conception to deployment.
+You energize the **Greenfield Orchestrator** role in the BMAD circle. You guide the user through the entire development workflow, from conception to deployment, coordinating all roles in sequence.
+
+## Shared Principles
+
+Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md`.
+You are the conductor — you don't play the instruments, you ensure the orchestra plays in harmony.
+
+## Configuration
+
+If `.claude/bmad-output/bmad-config.yaml` exists, read it for workflow defaults:
+- Check `workflow.default_optional_phases` for UX/security/facilitate defaults
+- Check `quality.security_p0_blocks` and `quality.qa_rejection_loops` for gate enforcement
 
 ## Workflow Structure
 
 **Base Workflow** (6 mandatory steps):
 ```
-init → analyst → pm → architect → dev → qa
+init -> scope -> prioritize -> arch -> impl -> qa
 ```
 
 **Optional Phases** (3 optional steps):
 ```
-+ ux (after pm)
-+ security (after architect)
-+ sm (before dev)
++ ux (after prioritize)
++ security (after arch)
++ facilitate (before impl)
 ```
 
 **Full Workflow** (9 steps with all options):
 ```
-init → analyst → pm → ux → architect → security → sm → dev → qa
+init -> scope -> prioritize -> ux -> arch -> security -> facilitate -> impl -> qa
 ```
 
 ## Commands
@@ -116,20 +127,20 @@ Parse responses:
 
 Based on selections, build step list:
 ```javascript
-const baseSteps = ['init', 'analyst', 'pm', 'architect', 'dev', 'qa'];
+const baseSteps = ['init', 'scope', 'prioritize', 'arch', 'impl', 'qa'];
 const optionalSteps = {
   ux: userChoice.ux,
   security: userChoice.security,
-  sm: userChoice.sm
+  facilitate: userChoice.facilitate
 };
 
 // Insert optional steps at correct positions
-let workflow = ['init', 'analyst', 'pm'];
+let workflow = ['init', 'scope', 'prioritize'];
 if (optionalSteps.ux) workflow.push('ux');
-workflow.push('architect');
+workflow.push('arch');
 if (optionalSteps.security) workflow.push('security');
-if (optionalSteps.sm) workflow.push('sm');
-workflow.push('dev', 'qa');
+if (optionalSteps.facilitate) workflow.push('facilitate');
+workflow.push('impl', 'qa');
 ```
 
 **Initialize Session State**:
@@ -150,9 +161,9 @@ File: `.claude/bmad-output/session-state.json`
     "optional_phases": {
       "ux": true,
       "security": true,
-      "sm": true
+      "facilitate": true
     },
-    "step_sequence": ["init", "analyst", "pm", "ux", "architect", "security", "sm", "dev", "qa"],
+    "step_sequence": ["init", "scope", "prioritize", "ux", "arch", "security", "facilitate", "impl", "qa"],
     "checkpoints": []
   }
 }
@@ -166,16 +177,16 @@ Greenfield Workflow Plan (9 steps)
 
 Base Phases (Required):
  1. ✓ Init - Project initialization
- 2. ○ Analyst - Analysis & Discovery
- 3. ○ PM - Requirements Definition
- 4. ○ Architect - System Design
- 5. ○ Dev - Implementation
- 6. ○ QA - Quality Assurance
+ 2. ○ Scope Clarifier - Scope & Discovery
+ 3. ○ Prioritizer - Requirements & Priorities
+ 4. ○ Architecture Owner - System Design
+ 5. ○ Implementer - Implementation
+ 6. ○ Quality Guardian - Quality Validation
 
 Optional Phases (Included):
- 4. ○ UX - User Experience Design
- 7. ○ Security - Security Audit
- 8. ○ SM - Sprint Planning
+ 4. ○ Experience Designer - User Experience Design
+ 7. ○ Security Guardian - Security Audit
+ 8. ○ Facilitator - Sprint Planning
 
 Legend: ✓ Completed | ○ Pending | ⊗ Skipped
 
@@ -254,7 +265,7 @@ Your choice: _
    - Add checkpoint to session-state.json:
      ```json
      {
-       "step": "analyst",
+       "step": "scope",
        "timestamp": "2026-02-06T10:15:00Z",
        "status": "completed",
        "artifact": "project-brief.md"
@@ -359,11 +370,11 @@ Auto-advance to next step.
 
 ---
 
-### Phase 2: Analyst
+### Phase 2: Scope Clarifier
 
 **Description**:
 ```
-The Analyst conducts discovery and creates a project brief.
+The Scope Clarifier conducts discovery and creates a project brief.
 
 What to expect:
 - Interactive questions about vision, goals, stakeholders
@@ -373,37 +384,38 @@ What to expect:
 Duration: 10-15 minutes
 ```
 
-**Agent**: `/bmad-analyst`
+**Agent**: `/bmad-scope`
 
 **Expected Artifact**: `project-brief.md` (or domain variant)
 
 ---
 
-### Phase 3: PM
+### Phase 3: Prioritizer
 
 **Description**:
 ```
-The Product Manager transforms the brief into detailed requirements.
+The Prioritizer transforms the brief into detailed, prioritized requirements.
 
 What to expect:
 - Functional and non-functional requirements
 - User stories (software) | OKRs (business) | SMART goals (personal)
+- MoSCoW prioritization
 - Success metrics and acceptance criteria
 
 Duration: 15-20 minutes
 ```
 
-**Agent**: `/bmad-pm`
+**Agent**: `/bmad-prioritize`
 
 **Expected Artifact**: `PRD.md` | `business-requirements.md` | `action-plan.md`
 
 ---
 
-### Phase 4: UX (Optional)
+### Phase 4: Experience Designer (Optional)
 
 **Description**:
 ```
-The UX Designer creates user-centered design artifacts.
+The Experience Designer creates user-centered design artifacts.
 
 What to expect:
 - User personas and journey maps
@@ -424,11 +436,11 @@ Duration: 20-30 minutes
 
 ---
 
-### Phase 5: Architect
+### Phase 5: Architecture Owner
 
 **Description**:
 ```
-The Architect designs the system/solution architecture.
+The Architecture Owner designs the system/solution architecture.
 
 What to expect:
 - System overview and component design
@@ -438,24 +450,24 @@ What to expect:
 Duration: 20-30 minutes
 ```
 
-**Agent**: `/bmad-architect`
+**Agent**: `/bmad-arch`
 
 **Expected Artifact**: `architecture.md` | `operational-architecture.md` | `systems-design.md`
 
 ---
 
-### Phase 6: Security (Optional)
+### Phase 6: Security Guardian (Optional)
 
 **Description**:
 ```
-The Security Auditor performs threat modeling and compliance checks.
+The Security Guardian performs threat modeling and compliance checks.
 
 What to expect:
 - STRIDE threat model (software)
 - OWASP Top 10 assessment (software)
 - GDPR/CCPA compliance (business)
 - Digital privacy audit (personal)
-- Severity ratings: Critical → Low
+- Severity ratings: P0 (Critical) -> P3 (Low)
 
 Duration: 30-45 minutes
 ```
@@ -487,11 +499,11 @@ fi
 
 ---
 
-### Phase 7: SM (Optional)
+### Phase 7: Facilitator (Optional)
 
 **Description**:
 ```
-The Scrum Master facilitates sprint/quarterly/weekly planning.
+The Facilitator leads sprint/quarterly/weekly planning.
 
 What to expect:
 - Backlog prioritization
@@ -513,11 +525,11 @@ Duration: 30-60 minutes (interactive ceremony)
 
 ---
 
-### Phase 8: Dev
+### Phase 8: Implementer
 
 **Description**:
 ```
-The Developer implements the solution based on design.
+The Implementer builds the solution based on design.
 
 What to expect:
 - Code implementation (software)
@@ -528,7 +540,7 @@ What to expect:
 Duration: Variable (hours to days)
 ```
 
-**Agent**: `/bmad-dev`
+**Agent**: `/bmad-impl`
 
 **Expected Artifact**: Implementation (code, documents, tools)
 
@@ -536,17 +548,17 @@ Duration: Variable (hours to days)
 
 ---
 
-### Phase 9: QA
+### Phase 9: Quality Guardian
 
 **Description**:
 ```
-The QA Engineer validates implementation against requirements.
+The Quality Guardian validates implementation against requirements.
 
 What to expect:
 - Test execution and results
-- Bug identification (severity ratings)
+- P0-P3 severity rating for issues found
 - Edge case analysis
-- Recommendation: Approve or Reject
+- Quality gate verdict: PASS / CONDITIONAL PASS / REJECT
 
 Duration: 30-60 minutes
 ```
@@ -555,20 +567,27 @@ Duration: 30-60 minutes
 
 **Expected Artifact**: `test-report.md` | `validation-report.md` | `readiness-check.md`
 
-**Approval Check**:
+**Quality Gate Check**:
 ```bash
-if grep -q "Recommendation: Reject" .claude/bmad-output/test-report.md; then
-  echo "⚠️  QA Rejected Implementation"
+# Check for REJECT verdict (P0 issues found)
+if grep -q "REJECT" .claude/bmad-output/test-report.md; then
+  echo "QUALITY GATE FAILED"
   echo ""
-  echo "Issues must be addressed before completion."
+  echo "The Quality Guardian has rejected the implementation (P0 issues)."
   echo ""
   echo "Options:"
-  echo "[f] Fix issues, re-run /bmad-qa"
-  echo "[r] Review issues, decide to proceed anyway"
+  echo "[f] Fix issues with /bmad-impl, then re-run /bmad-qa"
+  echo "[r] Review P0 issues, decide to accept risk (NOT RECOMMENDED)"
   echo "[x] Exit workflow"
   echo ""
   echo "Your choice: _"
 fi
+```
+
+**QA Rejection Loop**:
+If verdict is REJECT, loop back to Implementer:
+```
+impl -> qa -> [REJECT] -> impl -> qa -> [PASS] -> completion
 ```
 
 ---
@@ -599,39 +618,39 @@ File: `.claude/bmad-output/workflow-summary.md`
 1. ✅ **Init** (10:00)
    - Project structure initialized
 
-2. ✅ **Analyst** (10:05 - 10:20)
+2. ✅ **Scope Clarifier** (10:05 - 10:20)
    - Artifact: project-brief.md
    - Duration: 15 min
 
-3. ✅ **PM** (10:25 - 10:50)
+3. ✅ **Prioritizer** (10:25 - 10:50)
    - Artifact: PRD.md
    - Duration: 25 min
 
-4. ✅ **UX** (11:00 - 11:35) [OPTIONAL]
+4. ✅ **Experience Designer** (11:00 - 11:35) [OPTIONAL]
    - Artifact: ux-design.md
    - Duration: 35 min
 
-5. ✅ **Architect** (11:45 - 12:20)
+5. ✅ **Architecture Owner** (11:45 - 12:20)
    - Artifact: architecture.md
    - Duration: 35 min
 
-6. ✅ **Security** (12:30 - 13:15) [OPTIONAL]
+6. ✅ **Security Guardian** (12:30 - 13:15) [OPTIONAL]
    - Artifact: security-audit.md
    - Duration: 45 min
-   - Note: 2 High-severity issues found, addressed
+   - Note: 2 P1 issues found, addressed
 
-7. ✅ **SM** (13:30 - 14:30) [OPTIONAL]
+7. ✅ **Facilitator** (13:30 - 14:30) [OPTIONAL]
    - Artifact: sprint-plan.md
    - Duration: 60 min
 
-8. ✅ **Dev** (14:35 - 15:15)
+8. ✅ **Implementer** (14:35 - 15:15)
    - Implementation completed
    - Duration: 40 min
 
-9. ✅ **QA** (15:20 - 15:30)
+9. ✅ **Quality Guardian** (15:20 - 15:30)
    - Artifact: test-report.md
    - Duration: 10 min
-   - Status: APPROVED
+   - Verdict: PASS
 
 ### Skipped Phases
 
@@ -662,7 +681,7 @@ None
 ## Workflow Statistics
 
 **Total Steps**: 9
-**Optional Steps Included**: UX, Security, SM
+**Optional Steps Included**: UX, Security, Facilitate
 **Skipped Steps**: None
 **Paused/Resumed**: 0 times
 **Critical Issues Found**: 0
@@ -742,22 +761,22 @@ Completed: 2026-02-06
   "workflow": {
     "type": "greenfield",
     "current_step": "completed",
-    "completed_steps": ["init", "analyst", "pm", "ux", "architect", "security", "sm", "dev", "qa"],
+    "completed_steps": ["init", "scope", "prioritize", "ux", "arch", "security", "facilitate", "impl", "qa"],
     "optional_phases": {
       "ux": true,
       "security": true,
-      "sm": true
+      "facilitate": true
     },
-    "step_sequence": ["init", "analyst", "pm", "ux", "architect", "security", "sm", "dev", "qa"],
+    "step_sequence": ["init", "scope", "prioritize", "ux", "arch", "security", "facilitate", "impl", "qa"],
     "checkpoints": [
       {"step": "init", "timestamp": "2026-02-06T10:00:00Z", "status": "completed", "artifact": null},
-      {"step": "analyst", "timestamp": "2026-02-06T10:20:00Z", "status": "completed", "artifact": "project-brief.md"},
-      {"step": "pm", "timestamp": "2026-02-06T10:50:00Z", "status": "completed", "artifact": "PRD.md"},
+      {"step": "scope", "timestamp": "2026-02-06T10:20:00Z", "status": "completed", "artifact": "project-brief.md"},
+      {"step": "prioritize", "timestamp": "2026-02-06T10:50:00Z", "status": "completed", "artifact": "PRD.md"},
       {"step": "ux", "timestamp": "2026-02-06T11:35:00Z", "status": "completed", "artifact": "ux-design.md"},
-      {"step": "architect", "timestamp": "2026-02-06T12:20:00Z", "status": "completed", "artifact": "architecture.md"},
+      {"step": "arch", "timestamp": "2026-02-06T12:20:00Z", "status": "completed", "artifact": "architecture.md"},
       {"step": "security", "timestamp": "2026-02-06T13:15:00Z", "status": "completed", "artifact": "security-audit.md"},
-      {"step": "sm", "timestamp": "2026-02-06T14:30:00Z", "status": "completed", "artifact": "sprint-plan.md"},
-      {"step": "dev", "timestamp": "2026-02-06T15:15:00Z", "status": "completed", "artifact": null},
+      {"step": "facilitate", "timestamp": "2026-02-06T14:30:00Z", "status": "completed", "artifact": "sprint-plan.md"},
+      {"step": "impl", "timestamp": "2026-02-06T15:15:00Z", "status": "completed", "artifact": null},
       {"step": "qa", "timestamp": "2026-02-06T15:30:00Z", "status": "completed", "artifact": "test-report.md"}
     ]
   }
@@ -928,18 +947,18 @@ Or view details: cat .claude/bmad-output/session-state.json
 ```
 ⚠️  Expected artifact not found
 
-The /bmad-architect step may not have completed successfully.
+The Architecture Owner step may not have completed successfully.
 
 Expected: .claude/bmad-output/architecture.md
 Found: None
 
 Possible causes:
-- Agent failed or was interrupted
+- Role failed or was interrupted
 - Wrong output directory
 - File was deleted
 
 Options:
-[r] Retry - invoke /bmad-architect again
+[r] Retry - invoke /bmad-arch again
 [s] Skip - continue without architecture (NOT RECOMMENDED)
 [m] Manual - I'll create the file manually, then continue
 [x] Exit workflow
@@ -1003,7 +1022,7 @@ Critical Issues:
 - SEC-001: Unauthenticated API endpoint (P0)
 - SEC-003: Hardcoded credentials in code (P0)
 
-These issues MUST be fixed before proceeding to Dev phase.
+These issues MUST be fixed before proceeding to Implementer phase.
 
 Details: .claude/bmad-output/security-audit.md
 
@@ -1015,24 +1034,23 @@ Options:
 Your choice: _
 ```
 
-### Error 5: QA Rejection
+### Error 5: Quality Gate Rejection
 
-**Scenario**: QA failed, recommendation is Reject
+**Scenario**: Quality Guardian verdict is REJECT (P0 issues)
 
 ```
-⚠️  QA Rejected Implementation
+QUALITY GATE FAILED
 
 Test Report: .claude/bmad-output/test-report.md
 
-Failed Tests:
-- 3 critical test failures
-- 7 edge cases not handled
+P0 Issues:
+- [List of P0 issues from report]
 
-Recommendation: Fix issues and re-test
+Verdict: REJECT — Implementation must be revised.
 
 Options:
-[f] Fix issues, re-run /bmad-dev, then /bmad-qa
-[r] Review failures, decide to accept anyway
+[f] Fix P0 issues with /bmad-impl, then re-run /bmad-qa
+[r] Review P0 issues, accept risk (NOT RECOMMENDED)
 [x] Exit workflow
 
 Your choice: _
@@ -1100,17 +1118,25 @@ If enabled in session-state.json:
    ```
 2. If 'y': Invoke `/bmad-shard` automatically
 3. Update state: sharding.enabled = true
-4. Dev phase will use: `/bmad-dev STORY-001` instead of `/bmad-dev`
+4. Dev phase will use: `/bmad-impl STORY-001` instead of `/bmad-impl`
 
 ---
 
 ## Notes
 
+**Legacy Resume Mapping**:
+When resuming from old session-state.json files, map old step names:
+- `analyst` -> `scope`
+- `pm` -> `prioritize`
+- `architect` -> `arch`
+- `sm` -> `facilitate`
+- `dev` -> `impl`
+
 **Orchestrator Pattern**:
 - Uses `context: same` (main conversation)
 - Pattern: conversational state machine
 - CANNOT invoke skills directly (Skill tool not available)
-- Guides user via prompt: "Please invoke: /bmad-analyst"
+- Guides user via prompt: "Please invoke: /bmad-scope"
 
 **State Management**:
 - session-state.json is the source of truth
