@@ -29,6 +29,7 @@ claude-plugin-bmad/
 ├── resources/                   # Shared assets referenced by skills
 │   ├── soul.md                  # Shared circle principles
 │   ├── governance-protocol.md   # Dynamic governance protocol (tension sensing, role proposals)
+│   ├── skill-security-criteria.md # Security criteria for reviewing external skills
 │   ├── templates/<domain>/      # Output templates per domain
 │   │   └── software/role-template.md  # Template for promoting temporary roles to SKILL.md
 │   └── scripts/                 # Helper scripts
