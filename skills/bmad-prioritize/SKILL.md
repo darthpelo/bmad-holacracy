@@ -90,6 +90,19 @@ If no config file exists, use default behavior.
    > Output saved to: `.claude/bmad-output/<requirements-file>.md`
    > Next suggested role: `/bmad-arch` for solution architecture, or `/bmad-ux` for experience design.
 
+## Tension Sensing
+
+During your work, if you encounter a task that falls outside your defined scope and no existing BMAD role covers it, this is a **tension** — a gap in the circle.
+
+When you detect a tension:
+1. Read `${CLAUDE_PLUGIN_ROOT}/resources/governance-protocol.md`
+2. Formulate the tension using the standard format
+3. Present the proposal to the user for approval
+4. If approved, create the temporary role and continue
+
+Do NOT generate tensions for tasks covered by existing roles.
+Do NOT interrupt flow for minor gaps — only for recurring or significant ones.
+
 ## BMAD Principles
 - Specific and measurable: every requirement must have acceptance criteria
 - Testable requirements: every acceptance criterion must be verifiable by a test

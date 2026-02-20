@@ -8,7 +8,9 @@ No build step, no npm, no traditional tests. All content is Markdown.
 - `skills/bmad-<name>/SKILL.md` — auto-discovered skills (YAML frontmatter required)
 - `commands/<name>.md` — simple slash commands (no frontmatter)
 - `resources/soul.md` — shared circle principles (loaded by every role)
+- `resources/governance-protocol.md` — dynamic governance protocol (tension detection, role proposals, promotion)
 - `resources/templates/<domain>/<name>.md` — output scaffolds (software/business/personal)
+- `resources/templates/software/role-template.md` — template for generating new SKILL.md via promotion
 - `resources/templates/config-example.yaml` — per-project config template
 - `.claude-plugin/plugin.json` — plugin manifest
 - `docs/CUSTOMIZATION.md` — contributor guide with templates
@@ -48,6 +50,7 @@ Utilities: `/bmad-init`, `/bmad-shard`
 - GitHub Actions: always pass `${{ steps.* }}` via `env:` blocks, never inline in `run:` scripts (injection prevention)
 - Zsh shell: quote `gh api` URLs containing `?` (e.g., `gh api 'repos/.../contents/dir?ref=tag'`)
 - Git rebase continue: use `GIT_EDITOR=true git rebase --continue` (no `--no-edit` flag exists for rebase)
+- **Dynamic Governance**: all 8 agent roles have a `## Tension Sensing` block that references `governance-protocol.md`. Orchestrators have a `## Temporary Roles` section. New roles can be proposed, approved, used temporarily, and promoted to permanent SKILL.md files.
 
 ## Testing / Validation
 - `claude --plugin-dir ./claude-plugin-bmad` — local dev testing
@@ -62,6 +65,11 @@ Utilities: `/bmad-init`, `/bmad-shard`
 - Check TDD enforcement in QA: `grep -r "TDD compliance" skills/bmad-qa/` (should match)
 - Check Branch Guard: `grep -r "Branch Guard" skills/bmad-impl/ skills/bmad-greenfield/` (should match both)
 - Check tdd-checklist template exists: `[ -f resources/templates/software/tdd-checklist.md ] && echo OK`
+- Check governance protocol exists: `[ -f resources/governance-protocol.md ] && echo OK`
+- Check role template exists: `[ -f resources/templates/software/role-template.md ] && echo OK`
+- Check Tension Sensing in agent roles: `grep -l "Tension Sensing" skills/bmad-{scope,prioritize,arch,impl,qa,ux,security,facilitate}/SKILL.md | wc -l` (should be 8)
+- Check Temporary Roles in orchestrators: `grep -l "Temporary Roles" skills/bmad-{greenfield,sprint}/SKILL.md | wc -l` (should be 2)
+- Check governance-protocol.md sections: `grep -c "Tension Format\|Proposal Flow\|Temporary Role Format\|Promotion Rules" resources/governance-protocol.md` (should be 4)
 
 ## Related Repositories
 - Company version (holacracy, quality gates): github.com/alessioroberto82/claude-plugin-bmad

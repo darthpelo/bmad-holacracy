@@ -1094,6 +1094,12 @@ Your choice: _
 
 ---
 
+## Temporary Roles
+
+If temporary roles have been created during this session via the Governance Protocol (`${CLAUDE_PLUGIN_ROOT}/resources/governance-protocol.md`), include them in your workflow planning when relevant. Temporary roles can be invoked like any other BMAD role — they exist in the conversation context and follow the same circle principles.
+
+When presenting the workflow plan, list any active temporary roles alongside the standard roles.
+
 ## BMAD Principles
 
 ### 1. Human-in-the-Loop
