@@ -27,7 +27,10 @@ claude-plugin-bmad/
 ├── commands/                    # Slash commands (simpler than skills, no frontmatter)
 │   └── bmad.md
 ├── resources/                   # Shared assets referenced by skills
+│   ├── soul.md                  # Shared circle principles
+│   ├── governance-protocol.md   # Dynamic governance protocol (tension sensing, role proposals)
 │   ├── templates/<domain>/      # Output templates per domain
+│   │   └── software/role-template.md  # Template for promoting temporary roles to SKILL.md
 │   └── scripts/                 # Helper scripts
 ├── README.md
 └── LICENSE
@@ -37,7 +40,7 @@ claude-plugin-bmad/
 
 - **Skills** (`skills/*/SKILL.md`) are the primary extension point. Each skill directory is auto-discovered and becomes a `/skill-name` slash command.
 - **Commands** (`commands/*.md`) are simpler slash commands without frontmatter or agent configuration.
-- **Resources** (`resources/`) hold shared assets — `soul.md` (circle principles), templates, scripts — referenced via `${CLAUDE_PLUGIN_ROOT}/resources/...`.
+- **Resources** (`resources/`) hold shared assets — `soul.md` (circle principles), `governance-protocol.md` (dynamic governance), templates, scripts — referenced via `${CLAUDE_PLUGIN_ROOT}/resources/...`.
 - **soul.md** (`resources/soul.md`) defines shared principles loaded by every role in the circle.
 - **Config** (`resources/templates/config-example.yaml`) is a per-project config template users copy to `.claude/bmad-output/bmad-config.yaml`.
 - **Domain detection** is a shared pattern: every skill detects `software`, `business`, `personal`, or `general` from files in the working directory.
@@ -126,6 +129,19 @@ Detect the project domain by analyzing files in the current directory:
 - <Section 2>
 
 **Template**: `${CLAUDE_PLUGIN_ROOT}/resources/templates/personal/<filename>.md`
+
+## Tension Sensing
+
+During your work, if you encounter a task that falls outside your defined scope and no existing BMAD role covers it, this is a **tension** — a gap in the circle.
+
+When you detect a tension:
+1. Read `${CLAUDE_PLUGIN_ROOT}/resources/governance-protocol.md`
+2. Formulate the tension using the standard format
+3. Present the proposal to the user for approval
+4. If approved, create the temporary role and continue
+
+Do NOT generate tensions for tasks covered by existing roles.
+Do NOT interrupt flow for minor gaps — only for recurring or significant ones.
 
 ## Process
 
@@ -556,6 +572,7 @@ Every role skill must:
 1. Open with: `You energize the **<Role Title>** role in the BMAD circle.`
 2. Load shared principles: `Read the BMAD circle principles from ${CLAUDE_PLUGIN_ROOT}/resources/soul.md`
 3. Check per-project config: `Check for per-project config at .claude/bmad-output/bmad-config.yaml`
+4. Include a `## Tension Sensing` block referencing `governance-protocol.md` (see Role Skill Template above)
 
 ### Workflow sequence
 
