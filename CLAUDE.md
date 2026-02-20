@@ -38,6 +38,7 @@ Utilities: `/bmad-init`, `/bmad-shard`
 - Orchestrators use `context: same`, agent skills use `context: fork`
 - Output artifacts go to `.claude/bmad-output/` in the target project (not this repo)
 - Quality gates: P0=REJECT, P1=CONDITIONAL PASS, P2=PASS with notes, P3=PASS
+- After `git mv` of skill directories, Read each file at its new path before editing — tool tracks read state by path
 
 ## Testing / Validation
 - `claude --plugin-dir ./claude-plugin-bmad` — local dev testing
@@ -46,6 +47,12 @@ Utilities: `/bmad-init`, `/bmad-shard`
 - Check frontmatter: all `skills/*/SKILL.md` must start with `---`
 - Check all skills reference soul.md: `grep -l "soul.md" skills/*/SKILL.md | wc -l`
 - Check no old role names: `grep -r "bmad-analyst\|bmad-pm\|/bmad-architect\|/bmad-dev\|/bmad-sm" skills/ commands/`
+- After renaming skills, check no stale references: `grep -r "old-name" skills/ commands/ resources/ README.md docs/`
+- Cross-reference scan should cover ALL text files including templates and documentation, not just skills/
+
+## Related Repositories
+- Company version (holacracy, quality gates): github.com/alessioroberto82/claude-plugin-bmad
+- PR #1 (`feat/holacracy-evolution`): holacracy migration with soul.md, P0-P3 gates, role renames (merged)
 
 ## Installation (for users)
 - Local: `claude plugin install ./claude-plugin-bmad`
