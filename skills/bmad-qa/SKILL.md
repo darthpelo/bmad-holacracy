@@ -21,8 +21,9 @@ If `.claude/bmad-output/bmad-config.yaml` exists, read it and apply overrides:
 - Check for role-specific overrides in `roles.qa`
 - Check for quality gate settings in `quality`
 - Check for domain override in `domain`
+- Check `roles.qa.tdd_enforcement`: `strict` (default) = P0 REJECT, `relaxed` = P1 CONDITIONAL, `off` = skip TDD check
 
-If no config file exists, use default behavior.
+If no config file exists, use default behavior (TDD enforcement = strict for software).
 
 ## Domain Detection
 
@@ -75,7 +76,15 @@ Detect the project domain by analyzing files in the current directory:
 **Purpose**: Execute tests, validate against plan/requirements, generate report
 
 #### Software Development
-**Activities**:
+
+**TDD Compliance Check** (first, before any other verification):
+1. Check if `.claude/bmad-output/tdd-checklist.md` exists
+2. If missing or empty: issue **P0 REJECT** — "TDD compliance failed: no test-first evidence found. The Implementer must follow red-green-refactor and produce tdd-checklist.md."
+3. If present: verify that each acceptance criterion from PRD has a corresponding TDD cycle entry
+4. If TDD enforcement is `relaxed` (via config): downgrade to P1 CONDITIONAL instead of P0
+5. If TDD enforcement is `off` (via config): skip this check entirely
+
+**Activities** (after TDD compliance passes):
 - Run automated tests (if they exist)
 - Manual testing of features
 - Verify edge cases
@@ -83,6 +92,7 @@ Detect the project domain by analyzing files in the current directory:
 - Compare with test plan (if exists)
 
 **Output**: `test-report.md` with:
+- TDD Compliance (pass/fail, cycles logged, coverage of acceptance criteria)
 - Test Coverage (% lines tested)
 - Test Results (pass/fail per feature)
 - Issues Found (with P0-P3 severity)
@@ -121,6 +131,7 @@ Detect the project domain by analyzing files in the current directory:
 - Critical defects that prevent core functionality
 - Security vulnerabilities (cross-reference with `/bmad-security`)
 - Data loss or corruption risks
+- TDD compliance failure (software domain): missing or empty `tdd-checklist.md`
 - **Gate**: REJECT. Implementation MUST loop back to `/bmad-impl`.
 
 ### P1 — CONDITIONAL PASS
@@ -156,13 +167,14 @@ Based on findings:
 6. **Generate plan**: Write to `.claude/bmad-output/`
 
 ### Verification Mode
-1. **Load requirements**: Read what was supposed to be implemented
-2. **Load test plan** (if exists): Use as verification guide
-3. **Test implementation**: Run appropriate tests for domain
-4. **Identify issues**: Bugs, gaps, edge cases, risks
-5. **Assign severity**: P0/P1/P2/P3 for each issue
-6. **Apply quality gate**: Determine verdict
-7. **Generate report**: Write to `.claude/bmad-output/`
+1. **TDD compliance** (software only): Check `tdd-checklist.md` exists and is populated. If missing → P0 REJECT (or P1/skip per config). If TDD fails, stop here — no point running further tests.
+2. **Load requirements**: Read what was supposed to be implemented
+3. **Load test plan** (if exists): Use as verification guide
+4. **Test implementation**: Run appropriate tests for domain
+5. **Identify issues**: Bugs, gaps, edge cases, risks
+6. **Assign severity**: P0/P1/P2/P3 for each issue
+7. **Apply quality gate**: Determine verdict
+8. **Generate report**: Write to `.claude/bmad-output/`
 
 ## Handoff
 

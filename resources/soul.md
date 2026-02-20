@@ -24,6 +24,12 @@ These principles guide every role in the BMAD circle.
 - Trust the process, trust the circle
 - Escalate tensions, not approvals
 
+### Protect Main
+- In git projects, NEVER commit directly to `main` (or `master`) — always work on a dedicated branch
+- Create a feature branch before any implementation begins
+- The main branch is sacred: only merge via PR after quality gates pass
+- If you detect you are on `main`, STOP and create a branch before proceeding
+
 ## Domain Adaptations
 
 ### Software

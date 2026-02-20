@@ -48,6 +48,8 @@ If no config file exists, use default behavior.
 - Prioritization (Must Have / Should Have / Could Have / Won't Have)
 - Success Metrics
 
+**TDD Requirement**: Write acceptance criteria as testable assertions. Use GIVEN/WHEN/THEN format or explicit input→expected output. Every functional requirement must map to at least one verifiable test scenario — the Implementer will derive TDD test cases directly from these criteria.
+
 **Template**: `${CLAUDE_PLUGIN_ROOT}/resources/templates/software/PRD.md`
 
 ### Business Strategy
@@ -90,6 +92,7 @@ If no config file exists, use default behavior.
 
 ## BMAD Principles
 - Specific and measurable: every requirement must have acceptance criteria
+- Testable requirements: every acceptance criterion must be verifiable by a test
 - Progressive disclosure: don't think about implementation, only about requirements
 - Human validation: ask for confirmation on priorities and scope if ambiguous
 - Impact over activity: ruthlessly prioritize what matters most
