@@ -416,7 +416,7 @@ Sprint planning requires existing requirements:
 - Business: business-requirements.md (initiatives)
 - Personal: action-plan.md (goals)
 
-Please run /bmad-pm first to create requirements.
+Please run /bmad-prioritize first to create requirements.
 
 Exit ceremony? (y/n): _
 ```

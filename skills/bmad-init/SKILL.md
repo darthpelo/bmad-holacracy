@@ -8,6 +8,10 @@ context: same
 
 Initialize the BMAD circle in the current project.
 
+## Shared Principles
+
+Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md` to understand the circle you are initializing.
+
 ## Process
 
 1. **Detect domain** by analyzing files in the current directory:
