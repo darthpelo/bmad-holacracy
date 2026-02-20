@@ -1,0 +1,202 @@
+name: Upstream Sync Monitor
+
+on:
+  schedule:
+    - cron: '0 9 * * 1' # Monday 9am UTC
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Load last synced version
+        id: last-version
+        run: |
+          if [ -f .github/upstream-version.txt ]; then
+            echo "version=$(cat .github/upstream-version.txt)" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=none" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fetch latest upstream release
+        id: upstream
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE=$(gh api repos/bmad-code-org/BMAD-METHOD/releases/latest --jq '.tag_name')
+          echo "tag=$RELEASE" >> "$GITHUB_OUTPUT"
+          echo "Latest upstream release: $RELEASE"
+
+      - name: Check if new version
+        id: check
+        env:
+          LAST_VERSION: ${{ steps.last-version.outputs.version }}
+          UPSTREAM_TAG: ${{ steps.upstream.outputs.tag }}
+        run: |
+          if [ "$LAST_VERSION" = "$UPSTREAM_TAG" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "No new release. Current: $LAST_VERSION"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "New release detected: $UPSTREAM_TAG"
+          fi
+
+      - name: Fetch upstream file tree
+        if: steps.check.outputs.skip == 'false'
+        id: snapshot
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPSTREAM_TAG: ${{ steps.upstream.outputs.tag }}
+        run: |
+          DIRS=("src/bmm/agents" "src/core/agents" "src/core/tasks" "src/bmm/data")
+          SNAPSHOT="{}"
+
+          for dir in "${DIRS[@]}"; do
+            TREE=$(gh api "repos/bmad-code-org/BMAD-METHOD/contents/$dir?ref=$UPSTREAM_TAG" \
+              --jq '[.[] | {(.name): .sha}] | add // {}' 2>/dev/null || echo "{}")
+            SNAPSHOT=$(echo "$SNAPSHOT" | jq --arg d "$dir" --argjson t "$TREE" '. + {($d): $t}')
+          done
+
+          echo "$SNAPSHOT" > /tmp/new-snapshot.json
+          echo "Snapshot fetched."
+
+      - name: Compare snapshots and build report
+        if: steps.check.outputs.skip == 'false'
+        id: report
+        env:
+          UPSTREAM_TAG: ${{ steps.upstream.outputs.tag }}
+          LAST_VERSION: ${{ steps.last-version.outputs.version }}
+        run: |
+          NEW_SNAP="/tmp/new-snapshot.json"
+          OLD_SNAP=".github/upstream-snapshot.json"
+          MAPPING=".github/upstream-mapping.json"
+
+          if [ ! -f "$OLD_SNAP" ]; then
+            OLD_SNAP="/dev/null"
+          fi
+
+          # Build changes report
+          REPORT=""
+          HAS_CHANGES=false
+
+          for dir in "src/bmm/agents" "src/core/agents" "src/core/tasks" "src/bmm/data"; do
+            NEW_FILES=$(jq -r --arg d "$dir" '.[$d] // {} | keys[]' "$NEW_SNAP" 2>/dev/null || true)
+            OLD_FILES=$(jq -r --arg d "$dir" '.[$d] // {} | keys[]' "$OLD_SNAP" 2>/dev/null || true)
+
+            # Check for new and modified files
+            for file in $NEW_FILES; do
+              NEW_SHA=$(jq -r --arg d "$dir" --arg f "$file" '.[$d][$f]' "$NEW_SNAP")
+              OLD_SHA=$(jq -r --arg d "$dir" --arg f "$file" '.[$d][$f] // "none"' "$OLD_SNAP" 2>/dev/null || echo "none")
+
+              if [ "$OLD_SHA" = "none" ] || [ "$OLD_SHA" = "null" ]; then
+                CHANGE="NEW"
+                HAS_CHANGES=true
+              elif [ "$NEW_SHA" != "$OLD_SHA" ]; then
+                CHANGE="MODIFIED"
+                HAS_CHANGES=true
+              else
+                CHANGE="UNCHANGED"
+              fi
+
+              if [ "$CHANGE" != "UNCHANGED" ]; then
+                # Look up local skill mapping
+                LOCAL=$(jq -r --arg f "$file" '.[$f] // ["no local equivalent"] | join(", ")' "$MAPPING" 2>/dev/null || echo "no local equivalent")
+
+                case "$CHANGE" in
+                  NEW)      SUGGEST="New — evaluate for inclusion" ;;
+                  MODIFIED) SUGGEST="Review changes in $LOCAL" ;;
+                esac
+
+                REPORT="$REPORT| \`$dir/$file\` | $CHANGE | $LOCAL | $SUGGEST |"$'\n'
+              fi
+            done
+
+            # Check for removed files
+            for file in $OLD_FILES; do
+              EXISTS=$(jq -r --arg d "$dir" --arg f "$file" '.[$d][$f] // "removed"' "$NEW_SNAP")
+              if [ "$EXISTS" = "removed" ] || [ "$EXISTS" = "null" ]; then
+                LOCAL=$(jq -r --arg f "$file" '.[$f] // ["no local equivalent"] | join(", ")' "$MAPPING" 2>/dev/null || echo "no local equivalent")
+                REPORT="$REPORT| \`$dir/$file\` | REMOVED | $LOCAL | Removed — consider deprecating $LOCAL |"$'\n'
+                HAS_CHANGES=true
+              fi
+            done
+          done
+
+          if [ "$HAS_CHANGES" = false ]; then
+            echo "No file-level changes detected."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            # Write report to temp file for issue body
+            {
+              echo "## Upstream BMAD-METHOD $UPSTREAM_TAG — Sync Report"
+              echo ""
+              echo "A new upstream release has been detected."
+              echo ""
+              echo "**Release**: [$UPSTREAM_TAG](https://github.com/bmad-code-org/BMAD-METHOD/releases/tag/$UPSTREAM_TAG)"
+              echo "**Previous synced version**: $LAST_VERSION"
+              echo ""
+              echo "### Changes Detected"
+              echo ""
+              echo "| Upstream File | Change | Local Skill(s) | Suggested Action |"
+              echo "|---|---|---|---|"
+              echo "$REPORT"
+              echo ""
+              echo "### Next Steps"
+              echo ""
+              echo "1. Review each MODIFIED/NEW entry above"
+              echo "2. Compare upstream YAML against local SKILL.md for relevant changes"
+              echo "3. Adapt changes that improve the plugin (cherry-pick, don't copy)"
+              echo "4. Close this issue when review is complete"
+            } > /tmp/issue-body.md
+          fi
+
+      - name: Check for duplicate issue
+        if: steps.check.outputs.skip == 'false' && steps.report.outputs.has_changes == 'true'
+        id: duplicate
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPSTREAM_TAG: ${{ steps.upstream.outputs.tag }}
+        run: |
+          EXISTING=$(gh issue list --label upstream-sync --search "$UPSTREAM_TAG" --state open --json number --jq 'length')
+          if [ "$EXISTING" -gt 0 ]; then
+            echo "duplicate=true" >> "$GITHUB_OUTPUT"
+            echo "Issue already exists for $UPSTREAM_TAG"
+          else
+            echo "duplicate=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create sync issue
+        if: steps.check.outputs.skip == 'false' && steps.report.outputs.has_changes == 'true' && steps.duplicate.outputs.duplicate == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPSTREAM_TAG: ${{ steps.upstream.outputs.tag }}
+        run: |
+          gh label create upstream-sync --description "Upstream BMAD-METHOD sync report" --color "0075ca" 2>/dev/null || true
+          gh issue create \
+            --title "sync: upstream BMAD-METHOD $UPSTREAM_TAG changes detected" \
+            --body-file /tmp/issue-body.md \
+            --label upstream-sync
+
+      - name: Update state files
+        if: steps.check.outputs.skip == 'false'
+        env:
+          UPSTREAM_TAG: ${{ steps.upstream.outputs.tag }}
+        run: |
+          echo "$UPSTREAM_TAG" > .github/upstream-version.txt
+          cp /tmp/new-snapshot.json .github/upstream-snapshot.json
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/upstream-version.txt .github/upstream-snapshot.json
+          git diff --cached --quiet || git commit -m "chore: update upstream sync state to $UPSTREAM_TAG"
+          git push

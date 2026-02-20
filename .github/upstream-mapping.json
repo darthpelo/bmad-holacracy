@@ -1,0 +1,12 @@
+{
+  "analyst.agent.yaml": ["bmad-scope", "bmad-prioritize"],
+  "architect.agent.yaml": ["bmad-arch"],
+  "dev.agent.yaml": ["bmad-impl"],
+  "pm.agent.yaml": ["bmad-prioritize"],
+  "qa.agent.yaml": ["bmad-qa"],
+  "sm.agent.yaml": ["bmad-facilitate", "bmad-sprint"],
+  "ux-designer.agent.yaml": ["bmad-ux"],
+  "quick-flow-solo-dev.agent.yaml": ["bmad-greenfield"],
+  "bmad-master.agent.yaml": ["bmad-greenfield"],
+  "tech-writer": ["no local equivalent"]
+}
