@@ -9,6 +9,7 @@
 - [Holacracy Model](#holacracy-model)
 - [Roles Reference](#roles-reference)
 - [Quality Gates](#quality-gates)
+- [Dynamic Governance](#dynamic-governance)
 - [Supported Domains](#supported-domains)
 - [Domain Examples](#domain-examples)
 - [Workflow Orchestrators](#workflow-orchestrators)
@@ -89,6 +90,10 @@ BMAD uses a holacracy-inspired model where each AI role "energizes" a specific p
 
 Per-project behavior can be customized via `bmad-config.yaml` (see `resources/templates/config-example.yaml`).
 
+Additional safeguards enforced by the circle:
+- **Protect Main**: `bmad-impl` and `bmad-greenfield` block work on `main`/`master` — a dedicated feature branch is always required.
+- **TDD Mandatory** (software domain): `bmad-impl` enforces red-green-refactor; `bmad-qa` issues P0 REJECT if `tdd-checklist.md` is missing.
+
 ## Roles Reference
 
 ### Core Workflow Roles
@@ -134,6 +139,19 @@ The **Quality Guardian** (`/bmad-qa`) operates in two modes:
 - **Verify mode** (`/bmad-qa verify`): After implementation — executes tests, validates, reports with P0-P3 verdicts
 
 The **Security Guardian** (`/bmad-security`) can issue a **SECURITY BLOCK** (P0) that prevents the greenfield workflow from advancing to implementation.
+
+## Dynamic Governance
+
+BMAD implements dynamic governance inspired by holacracy's integrative decision-making. Any agent role can detect **tensions** — gaps where no existing role covers a needed capability — and propose new roles on the fly.
+
+**How it works:**
+
+1. **Tension Sensing**: All 8 agent roles monitor for tasks outside their scope. When a recurring or significant gap is detected, the role formulates a tension.
+2. **Role Proposal**: The agent presents a structured proposal to the user (human-in-the-loop). The user can approve, reject, or modify.
+3. **Temporary Roles**: Approved roles exist in the current session context. Orchestrators (`bmad-greenfield`, `bmad-sprint`) can include them in workflow planning.
+4. **Promotion**: After 2+ uses, a temporary role can be promoted to a permanent SKILL.md using the role template (`resources/templates/software/role-template.md`).
+
+The governance protocol is defined in `resources/governance-protocol.md` and loaded on-demand to minimize token usage.
 
 ## Supported Domains
 
@@ -269,13 +287,22 @@ claude-plugin-bmad/
 │   └── bmad.md
 ├── resources/
 │   ├── soul.md                    # Shared circle principles
+│   ├── governance-protocol.md     # Dynamic governance protocol
 │   ├── templates/
 │   │   ├── config-example.yaml    # Per-project config template
 │   │   ├── software/
+│   │   │   ├── role-template.md   # Template for promoting temporary roles
+│   │   │   └── tdd-checklist.md   # TDD cycle tracking template
 │   │   ├── business/
 │   │   └── personal/
 │   └── scripts/
 │       └── detect_domain.sh
+├── .github/
+│   ├── workflows/
+│   │   └── upstream-sync.yml      # Weekly upstream BMAD-METHOD sync monitor
+│   ├── upstream-mapping.json      # Upstream agent → local skill mapping
+│   ├── upstream-snapshot.json     # SHA snapshot of upstream files
+│   └── upstream-version.txt       # Last synced upstream version
 ├── README.md
 └── LICENSE
 ```
@@ -298,6 +325,8 @@ Want to add new skills, workflows, commands, templates, or domains? See the **[C
 
 - BMAD-METHOD: https://github.com/bmad-code-org/BMAD-METHOD
 - Documentation: https://bmadcodes.com/
+- Holacracy: https://www.holacracy.org/
+- Holacracy Constitution: https://github.com/holacracyone/Holacracy-Constitution
 
 ## License
 
