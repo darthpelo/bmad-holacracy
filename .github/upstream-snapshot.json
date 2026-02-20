@@ -1,0 +1,28 @@
+{
+  "src/bmm/agents": {
+    "analyst.agent.yaml": "28120d09822bf4754140c72d70287b45c223dccd",
+    "architect.agent.yaml": "d9fc48b9b0e2a8f1bc56e9cf04d5c33eaa8340ae",
+    "dev.agent.yaml": "c707124d0595389d19fc908574b04e10f8043250",
+    "pm.agent.yaml": "30377a6821d3fd0953ed700e003da18a786259a1",
+    "qa.agent.yaml": "9265f5a7b5e8c4a21a92e1006dedee5f9394373b",
+    "quick-flow-solo-dev.agent.yaml": "fff3052d4b9162fc8b5e45ee2ae1eb088423b05e",
+    "sm.agent.yaml": "d79f644e55bcde5f1c6a872bb9bc09f3d2930f7c",
+    "tech-writer": "53cf4cf5b9452b06a857232b5657989b560b62c1",
+    "ux-designer.agent.yaml": "301a07fc6250cc485004f3cfb1d69253e83457df"
+  },
+  "src/core/agents": {
+    "bmad-master.agent.yaml": "1304c1cc921a8ea633d10241263bc0c625e3137e"
+  },
+  "src/core/tasks": {
+    "editorial-review-prose.xml": "deb53570e817d22b8765804cbd283c62294f1870",
+    "editorial-review-structure.xml": "426dc3c8c533083da9c65746e8b61b85e5682ef0",
+    "help.md": "c3c3fab112caa7fe86219c81b4c34b880f539de3",
+    "index-docs.xml": "30e0609211ba784be535a8a3f3611d8e7fc73cff",
+    "review-adversarial-general.xml": "421719bb52721e53d11ce69fd9260b180ab4d7de",
+    "shard-doc.xml": "1dc8fe80e9a2569da90b57678fb9c0bf807c5811",
+    "workflow.xml": "536c9d8e7f70bd1d1dfa4b6634658d8730a50900"
+  },
+  "src/bmm/data": {
+    "project-context-template.md": "8ecf0d62333576812aecfc1776b841b47a986e84"
+  }
+}
