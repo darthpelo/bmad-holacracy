@@ -1,12 +1,14 @@
 # BMAD-METHOD — Claude Plugin
 
-**BMAD** (Breakthrough Method for Agile AI-Driven Development) is a framework of 12 specialized AI agents that guide you through structured workflows for software, business, and personal projects.
+**BMAD** (Breakthrough Method for Agile AI-Driven Development) is a holacracy-inspired AI circle of specialized roles that guide you through structured workflows for software, business, and personal projects.
 
 ## Table of Contents
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Agents Reference](#agents-reference)
+- [Holacracy Model](#holacracy-model)
+- [Roles Reference](#roles-reference)
+- [Quality Gates](#quality-gates)
 - [Supported Domains](#supported-domains)
 - [Domain Examples](#domain-examples)
 - [Workflow Orchestrators](#workflow-orchestrators)
@@ -34,7 +36,7 @@ Or install from GitHub:
 /plugin install bmad-method@darthpelo-claude-plugin-bmad
 ```
 
-After installation, all 12 skills become available as slash commands in any project.
+After installation, all skills become available as slash commands in any project.
 
 ## Quick Start
 
@@ -47,50 +49,66 @@ After installation, all 12 skills become available as slash commands in any proj
 
 3. **Follow the base workflow**:
    ```
-   /bmad-analyst    # Analysis & vision
-   /bmad-pm         # Detailed requirements
-   /bmad-architect  # Solution design
-   /bmad-dev        # Implementation
-   /bmad-qa         # Validation
+   /bmad-scope      # Scope clarification & discovery
+   /bmad-prioritize # Requirements & prioritization
+   /bmad-arch       # Solution architecture
+   /bmad-impl       # Implementation
+   /bmad-qa         # Quality validation
    ```
 
-4. **Extended workflow** (with optional agents):
+4. **Extended workflow** (with optional roles):
    ```
-   /bmad-analyst    # Analysis & vision
-   /bmad-pm         # Detailed requirements
-   /bmad-ux         # [OPTIONAL] User experience design
-   /bmad-architect  # Solution design
+   /bmad-scope      # Scope clarification & discovery
+   /bmad-prioritize # Requirements & prioritization
+   /bmad-ux         # [OPTIONAL] Experience design
+   /bmad-arch       # Solution architecture
    /bmad-security   # [OPTIONAL] Security audit
-   /bmad-sm         # [OPTIONAL] Sprint planning
-   /bmad-dev        # Implementation
-   /bmad-qa         # Validation
+   /bmad-facilitate # [OPTIONAL] Sprint planning
+   /bmad-impl       # Implementation
+   /bmad-qa         # Quality validation
    ```
 
-5. **Check status anytime**:
+5. **Or let the orchestrator guide you**:
+   ```
+   /bmad-greenfield  # Interactive full workflow with checkpoints
+   ```
+
+6. **Check status anytime**:
    ```
    /bmad
    ```
 
-## Agents Reference
+## Holacracy Model
 
-### Core Workflow Agents
+BMAD uses a holacracy-inspired model where each AI role "energizes" a specific purpose in the circle. All roles share core principles defined in `soul.md`:
 
-| Agent | Command | Description |
-|-------|---------|-------------|
-| Analyst | `/bmad-analyst` | Initial analysis, discovery, brainstorming. Creates project/business/personal brief. |
-| Product Manager | `/bmad-pm` | Detailed requirements: PRD (software), business requirements, action plan (personal). |
-| UX Designer | `/bmad-ux` | User research, wireframes, customer journey, life design. |
-| Architect | `/bmad-architect` | Solution design, ADRs, technology stack, system architecture. |
-| Security Auditor | `/bmad-security` | STRIDE threat modeling, OWASP Top 10, GDPR compliance, digital privacy. |
-| Scrum Master | `/bmad-sm` | Sprint planning, quarterly OKRs, weekly planning. |
-| Developer | `/bmad-dev` | Implementation following architecture and design. Supports context sharding. |
-| QA | `/bmad-qa` | Testing, validation, edge case identification. |
+- **Growth Over Ego** — Every role serves the project, not itself
+- **Iteration Over Perfection** — Ship, learn, improve
+- **Impact Over Activity** — Load only what's needed, eliminate token waste
+- **Distributed Authority** — Each role owns its domain, no bottlenecks
+
+Per-project behavior can be customized via `bmad-config.yaml` (see `resources/templates/config-example.yaml`).
+
+## Roles Reference
+
+### Core Workflow Roles
+
+| Role | Command | Description |
+|------|---------|-------------|
+| Scope Clarifier | `/bmad-scope` | Discovery and scope definition. Creates project/business/personal brief. |
+| Prioritizer | `/bmad-prioritize` | Requirements and prioritization: PRD (software), business requirements, action plan (personal). |
+| Experience Designer | `/bmad-ux` | User research, wireframes, customer journey, life design. |
+| Architecture Owner | `/bmad-arch` | Solution design, ADRs, technology stack, system architecture. |
+| Security Guardian | `/bmad-security` | STRIDE threat modeling, OWASP Top 10, GDPR compliance, digital privacy. |
+| Facilitator | `/bmad-facilitate` | Sprint planning, quarterly OKRs, weekly planning. |
+| Implementer | `/bmad-impl` | Implementation following architecture and design. Supports context sharding. |
+| Quality Guardian | `/bmad-qa` | Two modes: test planning (before impl) and verification (after impl). P0-P3 quality gates. |
 
 ### Workflow Orchestrators
 
 | Orchestrator | Command | Description |
 |--------------|---------|-------------|
-| Greenfield | `/bmad-greenfield` | Full workflow (6-9 steps: init to qa). Interactive checkpoints, pause/resume, optional phases. |
+| Greenfield | `/bmad-greenfield` | Full workflow (6-9 steps: init to qa). Interactive checkpoints, pause/resume, quality gates. |
 | Sprint | `/bmad-sprint` | Sprint planning ceremony (6 steps: backlog review to commitment). Domain-aware, resumable. |
 
 ### Utilities
@@ -99,6 +117,23 @@ After installation, all 12 skills become available as slash commands in any proj
 |---------|---------|-------------|
 | Init | `/bmad-init` | Initialize BMAD in the current project. Run once per project. |
 | Shard | `/bmad-shard` | Context sharding for large documents. Reduces token usage by 90%. |
+
+## Quality Gates
+
+BMAD enforces quality through a P0-P3 severity system:
+
+| Level | Verdict | Meaning |
+|-------|---------|---------|
+| P0 | REJECT | Hard block. Must be fixed before proceeding. |
+| P1 | CONDITIONAL PASS | Proceed with documented risks. Fix before release. |
+| P2 | PASS with notes | Minor issues, track in backlog. |
+| P3 | PASS | Optional improvements. |
+
+The **Quality Guardian** (`/bmad-qa`) operates in two modes:
+- **Plan mode** (`/bmad-qa plan`): Before implementation — defines test strategy, acceptance criteria, test cases
+- **Verify mode** (`/bmad-qa verify`): After implementation — executes tests, validates, reports with P0-P3 verdicts
+
+The **Security Guardian** (`/bmad-security`) can issue a **SECURITY BLOCK** (P0) that prevents the greenfield workflow from advancing to implementation.
 
 ## Supported Domains
 
@@ -117,14 +152,14 @@ Detection is based on files in the working directory (e.g., `package.json` = sof
 ```bash
 cd my-software-project/
 /bmad-init
-/bmad-analyst       # Output: .claude/bmad-output/project-brief.md
-/bmad-pm            # Output: .claude/bmad-output/PRD.md
-/bmad-ux wireframe  # Output: .claude/bmad-output/ux-design.md
-/bmad-architect     # Output: .claude/bmad-output/architecture.md
+/bmad-scope          # Output: .claude/bmad-output/project-brief.md
+/bmad-prioritize     # Output: .claude/bmad-output/PRD.md
+/bmad-ux wireframe   # Output: .claude/bmad-output/ux-design.md
+/bmad-arch           # Output: .claude/bmad-output/architecture.md
 /bmad-security audit # Output: .claude/bmad-output/security-audit.md
-/bmad-sm plan       # Output: .claude/bmad-output/sprint-plan.md
-/bmad-dev           # Implements features
-/bmad-qa            # Output: .claude/bmad-output/test-report.md
+/bmad-facilitate     # Output: .claude/bmad-output/sprint-plan.md
+/bmad-impl           # Implements features
+/bmad-qa             # Output: .claude/bmad-output/test-report.md
 ```
 
 ### Business Strategy
@@ -133,12 +168,12 @@ cd my-software-project/
 cd business-strategy/
 echo "# Business Plan" > business-plan.md
 /bmad-init
-/bmad-analyst       # Output: .claude/bmad-output/business-brief.md
-/bmad-pm            # Output: .claude/bmad-output/business-requirements.md
-/bmad-ux journey    # Output: .claude/bmad-output/customer-experience.md
-/bmad-architect     # Output: .claude/bmad-output/operational-architecture.md
-/bmad-security gdpr # Output: .claude/bmad-output/compliance-report.md
-/bmad-sm quarter    # Output: .claude/bmad-output/quarterly-plan.md
+/bmad-scope          # Output: .claude/bmad-output/business-brief.md
+/bmad-prioritize     # Output: .claude/bmad-output/business-requirements.md
+/bmad-ux journey     # Output: .claude/bmad-output/customer-experience.md
+/bmad-arch           # Output: .claude/bmad-output/operational-architecture.md
+/bmad-security gdpr  # Output: .claude/bmad-output/compliance-report.md
+/bmad-facilitate     # Output: .claude/bmad-output/quarterly-plan.md
 ```
 
 ### Personal Goals
@@ -147,12 +182,12 @@ echo "# Business Plan" > business-plan.md
 cd my-goals-2026/
 echo "# My Goals" > goals.md
 /bmad-init
-/bmad-analyst          # Output: .claude/bmad-output/personal-brief.md
-/bmad-pm               # Output: .claude/bmad-output/action-plan.md
+/bmad-scope            # Output: .claude/bmad-output/personal-brief.md
+/bmad-prioritize       # Output: .claude/bmad-output/action-plan.md
 /bmad-ux ideal-day     # Output: .claude/bmad-output/life-design.md
-/bmad-architect        # Output: .claude/bmad-output/systems-design.md
+/bmad-arch             # Output: .claude/bmad-output/systems-design.md
 /bmad-security privacy # Output: .claude/bmad-output/privacy-audit.md
-/bmad-sm week          # Output: .claude/bmad-output/weekly-plan.md
+/bmad-facilitate week  # Output: .claude/bmad-output/weekly-plan.md
 ```
 
 ## Workflow Orchestrators
@@ -167,7 +202,7 @@ Orchestrates the complete project workflow with interactive checkpoints:
 /bmad-greenfield status   # Show current progress
 ```
 
-Features: human checkpoints at each phase, optional phases (UX, Security, SM), pause/resume, artifact verification, state management via `session-state.json`.
+Features: human checkpoints at each phase, optional phases (UX, Security, Facilitate), pause/resume, artifact verification, quality gate enforcement, state management via `session-state.json`.
 
 ### bmad-sprint
 
@@ -187,7 +222,7 @@ For large documents (>3000 tokens), use sharding to reduce token usage by 90%:
 
 ```bash
 /bmad-shard           # Fragments PRD/architecture into atomic shards
-/bmad-dev STORY-001   # Developer loads only the relevant shard
+/bmad-impl STORY-001  # Implementer loads only the relevant shard
 ```
 
 ## Output Structure
@@ -196,15 +231,17 @@ Each project generates artifacts in `.claude/bmad-output/`:
 
 ```
 <project>/.claude/bmad-output/
-├── *-brief.md               # Analyst output
-├── PRD.md                   # PM output (software)
-├── business-requirements.md # PM output (business)
-├── action-plan.md           # PM output (personal)
-├── ux-design.md             # UX output (software)
-├── architecture.md          # Architect output (software)
-├── security-audit.md        # Security output (software)
-├── sprint-plan.md           # SM output (software)
-├── test-report.md           # QA output
+├── *-brief.md               # Scope Clarifier output
+├── PRD.md                   # Prioritizer output (software)
+├── business-requirements.md # Prioritizer output (business)
+├── action-plan.md           # Prioritizer output (personal)
+├── ux-design.md             # Experience Designer output (software)
+├── architecture.md          # Architecture Owner output (software)
+├── security-audit.md        # Security Guardian output (software)
+├── sprint-plan.md           # Facilitator output (software)
+├── test-plan.md             # Quality Guardian plan mode output
+├── test-report.md           # Quality Guardian verify mode output
+├── bmad-config.yaml         # Per-project config (optional)
 ├── session-state.json       # Workflow state
 └── shards/                  # Context shards (optional)
 ```
@@ -216,22 +253,24 @@ claude-plugin-bmad/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── skills/
-│   ├── bmad-analyst/SKILL.md
-│   ├── bmad-pm/SKILL.md
-│   ├── bmad-ux/SKILL.md
-│   ├── bmad-architect/SKILL.md
-│   ├── bmad-security/SKILL.md
-│   ├── bmad-sm/SKILL.md
-│   ├── bmad-dev/SKILL.md
-│   ├── bmad-qa/SKILL.md
-│   ├── bmad-greenfield/SKILL.md
-│   ├── bmad-sprint/SKILL.md
-│   ├── bmad-init/SKILL.md
-│   └── bmad-shard/SKILL.md
+│   ├── bmad-scope/SKILL.md        # Scope Clarifier
+│   ├── bmad-prioritize/SKILL.md   # Prioritizer
+│   ├── bmad-ux/SKILL.md           # Experience Designer
+│   ├── bmad-arch/SKILL.md         # Architecture Owner
+│   ├── bmad-security/SKILL.md     # Security Guardian
+│   ├── bmad-facilitate/SKILL.md   # Facilitator
+│   ├── bmad-impl/SKILL.md         # Implementer
+│   ├── bmad-qa/SKILL.md           # Quality Guardian
+│   ├── bmad-greenfield/SKILL.md   # Greenfield Orchestrator
+│   ├── bmad-sprint/SKILL.md       # Sprint Orchestrator
+│   ├── bmad-init/SKILL.md         # Init Utility
+│   └── bmad-shard/SKILL.md        # Shard Utility
 ├── commands/
 │   └── bmad.md
 ├── resources/
+│   ├── soul.md                    # Shared circle principles
 │   ├── templates/
+│   │   ├── config-example.yaml    # Per-project config template
 │   │   ├── software/
 │   │   ├── business/
 │   │   └── personal/
@@ -247,11 +286,13 @@ Want to add new skills, workflows, commands, templates, or domains? See the **[C
 
 ## BMAD Principles
 
-- **Progressive Disclosure**: Each agent sees only the current step
-- **Context Sharding**: Large documents fragmented for token efficiency
-- **Human-in-the-Loop**: Agents ask questions, never assume
-- **Domain Agnostic**: Works for software, business, and personal projects
-- **Version Controlled**: All artifacts are git-trackable
+- **Growth Over Ego** — Every role serves the project, not itself
+- **Iteration Over Perfection** — Ship, learn, improve
+- **Impact Over Activity** — Load only what's needed, eliminate token waste
+- **Distributed Authority** — Each role owns its domain, no bottlenecks
+- **Progressive Disclosure** — Each role sees only the current step
+- **Human-in-the-Loop** — Roles ask questions, never assume
+- **Domain Agnostic** — Works for software, business, and personal projects
 
 ## References
 

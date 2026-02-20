@@ -6,7 +6,11 @@ context: same
 
 # BMAD Init
 
-Initialize the BMAD-METHOD framework in the current project.
+Initialize the BMAD circle in the current project.
+
+## Shared Principles
+
+Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md` to understand the circle you are initializing.
 
 ## Process
 
@@ -41,20 +45,20 @@ Initialize the BMAD-METHOD framework in the current project.
    Domain: <detected-domain>
    Phase: analysis
 
-   Available agents:
-   - /bmad-analyst - Analysis and discovery
-   - /bmad-pm - Detailed requirements
-   - /bmad-architect - Solution design
-   - /bmad-dev - Implementation
-   - /bmad-qa - Testing and validation
+   Circle roles:
+   - /bmad-scope - Scope clarification and discovery
+   - /bmad-prioritize - Requirements and prioritization
+   - /bmad-arch - Solution architecture
+   - /bmad-impl - Implementation
+   - /bmad-qa - Quality validation
 
    Workflow:
-   1. /bmad-analyst → create brief
-   2. /bmad-pm → create requirements
-   3. /bmad-architect → create design
-   4. /bmad-dev → implement
-   5. /bmad-qa → validate
+   1. /bmad-scope -> clarify scope
+   2. /bmad-prioritize -> define requirements
+   3. /bmad-arch -> design architecture
+   4. /bmad-impl -> implement
+   5. /bmad-qa -> validate
    ```
 
 5. **Confirm**:
-   "✓ BMAD initialized for domain: <domain>. Start with: /bmad-analyst"
+   "BMAD circle initialized for domain: <domain>. Start with: /bmad-scope"

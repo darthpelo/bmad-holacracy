@@ -31,16 +31,16 @@ Completed steps: <list or N/A>
 Generated artifacts:
 - <list of files in bmad-output/ or "None">
 
-Available skills:
+Available roles:
   Core Workflow:
-    /bmad-analyst    - Initial analysis and discovery
-    /bmad-pm         - Detailed requirements (PRD, business req, action plan)
-    /bmad-ux         - UX design (wireframes, journey, life design)
-    /bmad-architect  - Solution design (architecture, systems)
+    /bmad-scope      - Scope clarification and discovery
+    /bmad-prioritize - Requirements and prioritization (PRD, business req, action plan)
+    /bmad-ux         - Experience design (wireframes, journey, life design)
+    /bmad-arch       - Solution architecture (ADRs, system design)
     /bmad-security   - Security audit (STRIDE, OWASP, compliance, privacy)
-    /bmad-sm         - Sprint/quarter/week planning
-    /bmad-dev        - Implementation
-    /bmad-qa         - Testing and validation
+    /bmad-facilitate - Sprint/quarter/week planning facilitation
+    /bmad-impl       - Implementation
+    /bmad-qa         - Quality validation (plan or verify mode)
 
   Orchestrators:
     /bmad-greenfield - Full workflow (init -> qa, 6-9 steps)
@@ -50,5 +50,5 @@ Available skills:
     /bmad-init       - Initialize BMAD in the project
     /bmad-shard      - Context sharding for large documents
 
-Quick start: /bmad-init to initialize, then /bmad-analyst to begin.
+Quick start: /bmad-init to initialize, then /bmad-scope to begin.
 ```
