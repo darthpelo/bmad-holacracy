@@ -39,6 +39,8 @@ Utilities: `/bmad-init`, `/bmad-shard`
 - Output artifacts go to `.claude/bmad-output/` in the target project (not this repo)
 - Quality gates: P0=REJECT, P1=CONDITIONAL PASS, P2=PASS with notes, P3=PASS
 - After `git mv` of skill directories, Read each file at its new path before editing — tool tracks read state by path
+- **TDD mandatory** (software domain): `bmad-impl` enforces red-green-refactor; `bmad-qa` issues P0 REJECT if `tdd-checklist.md` missing. Configurable via `roles.qa.tdd_enforcement` in bmad-config.yaml (`strict`/`relaxed`/`off`)
+- **Protect Main**: never work directly on `main`/`master` — soul.md principle + Git Branch Guard in `bmad-impl` and `bmad-greenfield`
 
 ## Testing / Validation
 - `claude --plugin-dir ./claude-plugin-bmad` — local dev testing
@@ -49,10 +51,15 @@ Utilities: `/bmad-init`, `/bmad-shard`
 - Check no old role names: `grep -r "bmad-analyst\|bmad-pm\|/bmad-architect\|/bmad-dev\|/bmad-sm" skills/ commands/`
 - After renaming skills, check no stale references: `grep -r "old-name" skills/ commands/ resources/ README.md docs/`
 - Cross-reference scan should cover ALL text files including templates and documentation, not just skills/
+- Check TDD in impl: `grep -r "red-green-refactor" skills/bmad-impl/` (should match)
+- Check TDD enforcement in QA: `grep -r "TDD compliance" skills/bmad-qa/` (should match)
+- Check Branch Guard: `grep -r "Branch Guard" skills/bmad-impl/ skills/bmad-greenfield/` (should match both)
+- Check tdd-checklist template exists: `[ -f resources/templates/software/tdd-checklist.md ] && echo OK`
 
 ## Related Repositories
 - Company version (holacracy, quality gates): github.com/alessioroberto82/claude-plugin-bmad
 - PR #1 (`feat/holacracy-evolution`): holacracy migration with soul.md, P0-P3 gates, role renames (merged)
+- PR #2 (`feat/mandatory-tdd-and-branch-protection`): mandatory TDD for software, Protect Main rule, tdd-checklist template
 
 ## Installation (for users)
 - Local: `claude plugin install ./claude-plugin-bmad`
