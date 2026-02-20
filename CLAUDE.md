@@ -13,7 +13,7 @@ No build step, no npm, no traditional tests. All content is Markdown.
 - `.claude-plugin/plugin.json` — plugin manifest
 - `docs/CUSTOMIZATION.md` — contributor guide with templates
 - `.github/workflows/upstream-sync.yml` — weekly upstream BMAD-METHOD sync monitor
-- `.github/upstream-mapping.json` — upstream agent → local skill mapping
+- `.github/upstream-mapping.json` — upstream agent → local skill mapping (agents in TWO upstream dirs: `src/bmm/agents/` + `src/core/agents/`)
 - `.github/upstream-snapshot.json` — SHA snapshot of upstream files (auto-updated by Action)
 - `.github/upstream-version.txt` — last synced upstream version (auto-updated by Action)
 
@@ -47,6 +47,7 @@ Utilities: `/bmad-init`, `/bmad-shard`
 - **Protect Main**: never work directly on `main`/`master` — soul.md principle + Git Branch Guard in `bmad-impl` and `bmad-greenfield`
 - GitHub Actions: always pass `${{ steps.* }}` via `env:` blocks, never inline in `run:` scripts (injection prevention)
 - Zsh shell: quote `gh api` URLs containing `?` (e.g., `gh api 'repos/.../contents/dir?ref=tag'`)
+- Git rebase continue: use `GIT_EDITOR=true git rebase --continue` (no `--no-edit` flag exists for rebase)
 
 ## Testing / Validation
 - `claude --plugin-dir ./claude-plugin-bmad` — local dev testing
