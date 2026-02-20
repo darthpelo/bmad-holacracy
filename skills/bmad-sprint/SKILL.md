@@ -480,6 +480,10 @@ Try again: _
 }
 ```
 
+## Temporary Roles
+
+If temporary roles have been created during this session via the Governance Protocol (`${CLAUDE_PLUGIN_ROOT}/resources/governance-protocol.md`), include them in your ceremony planning when relevant. Temporary roles can be invoked like any other BMAD role — they exist in the conversation context and follow the same circle principles.
+
 ## BMAD Principles
 
 - **Human-in-the-Loop**: Ask for input at every step, don't assume
