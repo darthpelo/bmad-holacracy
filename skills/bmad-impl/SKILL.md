@@ -38,18 +38,27 @@ If no config file exists, use default behavior.
 ## Domain-Specific Behavior
 
 ### Software Development
+
+**TDD is mandatory for software projects.** Every behavior must be implemented using the red-green-refactor cycle. The Implementer produces a `tdd-checklist.md` artifact that the QA Guardian will verify.
+
 **Activities**:
-- Implement features according to PRD and architecture
-- Write code following best practices and existing patterns
-- Create tests (unit, integration)
+- Write failing tests BEFORE implementation code (red-green-refactor)
+- Implement minimal code to pass each test
+- Refactor while keeping tests green
+- Log each TDD cycle in `tdd-checklist.md`
 - Document APIs and complex functions
 - Self-review before handoff
 
 **Workflow**:
 1. Read story/task to implement (if sharding is present, read specific shard)
-2. Implement following architecture and existing patterns
-3. Add tests for coverage
-4. Update documentation if necessary
+2. Initialize `tdd-checklist.md` using template `${CLAUDE_PLUGIN_ROOT}/resources/templates/software/tdd-checklist.md`, write to `.claude/bmad-output/tdd-checklist.md`
+3. **For each behavior/acceptance criterion**:
+   - **RED**: Write a failing test that defines the expected behavior. Run it — verify it fails.
+   - **GREEN**: Write the minimal code to make the test pass. Run it — verify it passes.
+   - **REFACTOR**: Clean up code and tests while keeping all tests green.
+   - **LOG**: Record the cycle in `tdd-checklist.md` (test name, red/green results, refactor notes).
+4. After all behaviors are covered, update the Coverage Summary and Compliance Verdict in `tdd-checklist.md`
+5. Update documentation if necessary
 
 ### Business Strategy
 **Activities**:
@@ -86,18 +95,31 @@ If directory `.claude/bmad-output/shards/stories/` exists:
 
 **Benefit**: 90% token reduction, absolute focus on current task
 
+## Git Branch Guard
+
+Before ANY implementation work, if the project is a git repository:
+
+1. Check the current branch: `git branch --show-current`
+2. If on `main` or `master`: **STOP. Do not proceed.**
+   - Inform the user: "You are on `main`. The BMAD circle requires a dedicated branch for all work. Create a feature branch before continuing."
+   - Suggest: `git checkout -b feat/<descriptive-name>`
+3. If on a feature branch: proceed normally.
+
+This is a **hard block** — no exceptions. The main branch is protected by circle principles (`soul.md`).
+
 ## Process
 
-1. **Validate context**: Verify that design/plan exists
-2. **Identify task**: What to implement (from args or from architecture)
-3. **Implement**: Write code/documents/tools
-4. **Self-review**: Verify quality before handoff
-5. **Handoff**:
+1. **Branch guard**: Verify NOT on main/master (see above)
+2. **Validate context**: Verify that design/plan exists
+3. **Identify task**: What to implement (from args or from architecture)
+4. **Implement**: Write code/documents/tools
+5. **Self-review**: Verify quality before handoff
+6. **Handoff**:
    > **Implementer — Complete.**
    > Next suggested role: `/bmad-qa` for quality validation.
 
 ## BMAD Principles
 - Follow the design: don't invent solutions different from those architected
-- Test as you go: implement + test together
+- Test first: red-green-refactor is the law for software projects
 - Context isolation: if using sharding, focus only on current task
 - No gold-plating: solve the problem at hand, nothing more

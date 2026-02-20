@@ -44,6 +44,7 @@ If no config file exists, use default behavior.
 - Component Architecture (modules, services, database)
 - ADRs (Architecture Decision Records) for key choices
 - Technology Stack with justifications
+- Testability (DI strategy, mocking boundaries, test isolation)
 - Performance & Scalability considerations
 - Security considerations
 
@@ -88,6 +89,7 @@ If no config file exists, use default behavior.
 **Decision**: What we decided
 **Alternatives Considered**: Other options evaluated
 **Consequences**: Pros/cons of the decision
+**Testability Impact**: How this decision affects test isolation, DI, and mocking (software domain)
 ```
 
 ## BMAD Principles

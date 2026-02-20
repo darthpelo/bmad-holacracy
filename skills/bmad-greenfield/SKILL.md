@@ -72,6 +72,22 @@ if [ -f ".claude/bmad-output/session-state.json" ]; then
 fi
 ```
 
+**Git Branch Guard**:
+
+If the project is a git repository, check the current branch BEFORE proceeding:
+```bash
+BRANCH=$(git branch --show-current 2>/dev/null)
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+  echo "You are on '$BRANCH'. BMAD requires a dedicated branch."
+  echo ""
+  echo "Please create a feature branch before starting the workflow:"
+  echo "  git checkout -b feat/<project-name>"
+  echo ""
+  echo "This is a hard block — the BMAD circle never works directly on main."
+  # STOP HERE — do not proceed until user switches branch
+fi
+```
+
 **Initialize structure** (if it doesn't exist):
 ```bash
 mkdir -p .claude/bmad-output
@@ -532,7 +548,7 @@ Duration: 30-60 minutes (interactive ceremony)
 The Implementer builds the solution based on design.
 
 What to expect:
-- Code implementation (software)
+- Code implementation (software) — TDD required: red-green-refactor workflow will be enforced
 - Documentation creation (business)
 - Tool/tracker setup (personal)
 - Self-review before handoff
@@ -542,7 +558,7 @@ Duration: Variable (hours to days)
 
 **Agent**: `/bmad-impl`
 
-**Expected Artifact**: Implementation (code, documents, tools)
+**Expected Artifact**: Implementation (code, documents, tools). For software domain: also `tdd-checklist.md` in `.claude/bmad-output/`.
 
 **Note**: This phase may take multiple sessions. User can pause and resume.
 
@@ -555,6 +571,7 @@ Duration: Variable (hours to days)
 The Quality Guardian validates implementation against requirements.
 
 What to expect:
+- TDD compliance check (software domain): verifies tdd-checklist.md exists
 - Test execution and results
 - P0-P3 severity rating for issues found
 - Edge case analysis
@@ -566,6 +583,25 @@ Duration: 30-60 minutes
 **Agent**: `/bmad-qa`
 
 **Expected Artifact**: `test-report.md` | `validation-report.md` | `readiness-check.md`
+
+**TDD Pre-Check (software domain only)**:
+```bash
+# Before invoking QA, check TDD evidence exists
+if [ "$DOMAIN" = "software" ]; then
+  if [ ! -f ".claude/bmad-output/tdd-checklist.md" ]; then
+    echo "WARNING: tdd-checklist.md not found"
+    echo ""
+    echo "The Implementer should have produced a TDD checklist."
+    echo "Without it, QA will issue a P0 REJECT."
+    echo ""
+    echo "Options:"
+    echo "[f] Fix - go back to /bmad-impl to complete TDD"
+    echo "[c] Continue anyway (QA will likely REJECT)"
+    echo ""
+    echo "Your choice: _"
+  fi
+fi
+```
 
 **Quality Gate Check**:
 ```bash

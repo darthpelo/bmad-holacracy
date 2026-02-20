@@ -25,6 +25,14 @@ workflow:
 
 # Role overrides (customize individual role behavior)
 roles:
+  # QA Guardian overrides
+  qa:
+    # TDD enforcement level for software domain
+    # "strict" (default): P0 REJECT if tdd-checklist.md missing
+    # "relaxed": P1 CONDITIONAL PASS if tdd-checklist.md missing
+    # "off": skip TDD compliance check entirely
+    tdd_enforcement: strict
+
   # Example: customize the architecture owner
   # arch:
   #   extra_instructions: |
