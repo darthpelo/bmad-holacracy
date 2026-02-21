@@ -96,7 +96,7 @@ Check for per-project config at `.claude/bmad-output/bmad-config.yaml`. If found
 ## Domain Detection
 
 Detect the project domain by analyzing files in the current directory:
-- **software**: if `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
+- **software**: if `Package.swift`, `*.xcodeproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
 - **business**: if `business-plan.md`, `market-analysis.md`, `strategy.md` exists
 - **personal**: if `goals.md`, `journal.md`, or `habits/` folder exists
 - **general**: default if no indicator found
@@ -225,7 +225,7 @@ Check for per-project config at `.claude/bmad-output/bmad-config.yaml`. If found
 ## Domain Detection
 
 Detect the project domain by analyzing files in the current directory:
-- **software**: if `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
+- **software**: if `Package.swift`, `*.xcodeproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
 - **business**: if `business-plan.md`, `market-analysis.md`, `strategy.md` exists
 - **personal**: if `goals.md`, `journal.md`, or `habits/` folder exists
 - **general**: default if no indicator found
@@ -292,7 +292,7 @@ step1 → step2 → step3 → step4
 ## Domain Detection
 
 Detect the project domain by analyzing files in the current directory:
-- **software**: if `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
+- **software**: if `Package.swift`, `*.xcodeproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
 - **business**: if `business-plan.md`, `market-analysis.md`, `strategy.md` exists
 - **personal**: if `goals.md`, `journal.md`, or `habits/` folder exists
 - **general**: default if no indicator found
@@ -470,7 +470,7 @@ Every SKILL.md has a Domain Detection section. Add your domain **before** the `g
 ## Domain Detection
 
 Detect the project domain by analyzing files in the current directory:
-- **software**: if `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
+- **software**: if `Package.swift`, `*.xcodeproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
 - **business**: if `business-plan.md`, `market-analysis.md`, `strategy.md` exists
 - **personal**: if `goals.md`, `journal.md`, or `habits/` folder exists
 - **research**: if `paper.tex`, `bibliography.bib`, `data/` folder, or `experiments/` folder exists
@@ -622,7 +622,7 @@ Every skill includes this identical block:
 ## Domain Detection
 
 Detect the project domain by analyzing files in the current directory:
-- **software**: if `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
+- **software**: if `Package.swift`, `*.xcodeproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
 - **business**: if `business-plan.md`, `market-analysis.md`, `strategy.md` exists
 - **personal**: if `goals.md`, `journal.md`, or `habits/` folder exists
 - **general**: default if no indicator found

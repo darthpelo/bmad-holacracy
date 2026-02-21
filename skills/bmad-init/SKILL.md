@@ -74,23 +74,11 @@ Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md` t
      - Swift Concurrency — async/await, actors, Sendable, Swift 6 migration
      - Swift Testing — modern test framework, #expect/#require, XCTest migration
 
-   Install all? (y/n)
+   Install these skills? (y/n)
    ```
 
-   If yes, provide install commands:
-   ```bash
-   # SwiftUI Expert
-   claude plugin marketplace add AvdLee/SwiftUI-Agent-Skill
-   claude plugin install swiftui-expert@swiftui-expert-skill
-
-   # Swift Concurrency
-   claude plugin marketplace add AvdLee/Swift-Concurrency-Agent-Skill
-   claude plugin install swift-concurrency@swift-concurrency-agent-skill
-
-   # Swift Testing
-   claude plugin marketplace add AvdLee/Swift-Testing-Agent-Skill
-   claude plugin install swift-testing-expert@swift-testing-agent-skill
-   ```
+   If yes: suggest user invokes `/bmad-skills` to discover and install with security review:
+   "Run `/bmad-skills` to review and install Swift expert skills (SwiftUI, Concurrency, Testing from AvdLee)."
 
    If no: proceed without Swift skills.
 
