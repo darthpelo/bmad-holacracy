@@ -28,7 +28,7 @@ If no config file exists, use default behavior (TDD enforcement = strict for sof
 ## Domain Detection
 
 Detect the project domain by analyzing files in the current directory:
-- **software**: if `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
+- **software**: if `Package.swift`, `*.xcodeproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
 - **business**: if `business-plan.md`, `market-analysis.md`, `strategy.md` exists
 - **personal**: if `goals.md`, `journal.md`, or `habits/` folder exists
 - **general**: default if no indicator found
@@ -90,6 +90,13 @@ Detect the project domain by analyzing files in the current directory:
 - Verify edge cases
 - Validate against acceptance criteria
 - Compare with test plan (if exists)
+
+**Swift Testing Recommendations** (if `Package.swift` or `*.xcodeproj` detected):
+
+- Suggest: "Invoke `/swift-testing-expert` for test quality review and modern Swift Testing patterns"
+- If only XCTest imports found (no `import Testing`): suggest migration path to Swift Testing framework
+- Validate: parallel-safe tests, correct use of #expect vs #require, parameterized tests where applicable
+- If a skill is not installed, note: "Skill not installed. Add marketplace: `claude plugin marketplace add AvdLee/Swift-Testing-Agent-Skill`, then install: `claude plugin install swift-testing-expert@swift-testing-agent-skill`"
 
 **Output**: `test-report.md` with:
 - TDD Compliance (pass/fail, cycles logged, coverage of acceptance criteria)

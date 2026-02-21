@@ -18,7 +18,7 @@ Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md` a
 ## Domain Detection
 
 Detect the project domain by analyzing files in the current directory:
-- **software**: if `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
+- **software**: if `Package.swift`, `*.xcodeproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
 - **business**: if `business-plan.md`, `market-analysis.md`, `strategy.md` exists
 - **personal**: if `goals.md`, `journal.md`, or `habits/` folder exists
 - **general**: default if no indicator found
@@ -47,6 +47,19 @@ If no config file exists, use default behavior.
 - Testability (DI strategy, mocking boundaries, test isolation)
 - Performance & Scalability considerations
 - Security considerations
+
+**Swift Architecture Guidance** (if `Package.swift` or `*.xcodeproj` detected):
+
+When designing architecture for a Swift project, suggest:
+- "Invoke `/swift-concurrency` for guidance on actor isolation boundaries, Sendable conformance, and async/await architecture"
+- "Invoke `/swiftui-expert` for SwiftUI state management patterns (@Observable vs ObservableObject) and view composition strategy"
+
+Consider in ADRs:
+- Default actor isolation strategy (module-level @MainActor vs. explicit)
+- Structured vs. unstructured concurrency boundaries
+- State management approach (if SwiftUI)
+
+If a skill is not installed, note: "Skill not installed. Add marketplace: `claude plugin marketplace add AvdLee/{repo-name}`, then install: `claude plugin install {plugin-name}@{marketplace-name}`"
 
 ### Business Strategy
 **Focus**: Process design, workflow, organizational structure
