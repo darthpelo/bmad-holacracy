@@ -13,6 +13,7 @@
 - [Supported Domains](#supported-domains)
 - [Domain Examples](#domain-examples)
 - [Workflow Orchestrators](#workflow-orchestrators)
+- [Skills Discovery](#skills-discovery)
 - [Context Sharding](#context-sharding)
 - [Output Structure](#output-structure)
 - [Plugin Structure](#plugin-structure)
@@ -122,6 +123,7 @@ Additional safeguards enforced by the circle:
 |---------|---------|-------------|
 | Init | `/bmad-init` | Initialize BMAD in the current project. Run once per project. |
 | Shard | `/bmad-shard` | Context sharding for large documents. Reduces token usage by 90%. |
+| Skills | `/bmad-skills` | Discover, review, and install external skills from skills.sh with security gate. |
 
 ## Quality Gates
 
@@ -234,6 +236,20 @@ Interactive sprint planning ceremony:
 
 6-step process: Backlog Review, Capacity Planning, Story Selection, Task Breakdown, Sprint Goal, Sprint Commitment.
 
+## Skills Discovery
+
+BMAD integrates with [skills.sh](https://skills.sh/) to discover and install community skills with a mandatory security gate:
+
+```bash
+/bmad-skills                    # Suggest skills based on project domain
+/bmad-skills search <query>     # Search skills.sh by keyword
+/bmad-skills install <owner/repo>  # Security review + install
+/bmad-skills review <owner/repo>   # Security review only
+/bmad-skills list               # Show installed external skills
+```
+
+Every skill must pass a security review before installation. The review analyzes tool usage, shell commands, file access, and network patterns. Verdicts: **PASS** (low risk), **WARN** (medium risk — user decides), **BLOCK** (high risk — cannot install). Security criteria are defined in `resources/skill-security-criteria.md`.
+
 ## Context Sharding
 
 For large documents (>3000 tokens), use sharding to reduce token usage by 90%:
@@ -282,12 +298,14 @@ claude-plugin-bmad/
 │   ├── bmad-greenfield/SKILL.md   # Greenfield Orchestrator
 │   ├── bmad-sprint/SKILL.md       # Sprint Orchestrator
 │   ├── bmad-init/SKILL.md         # Init Utility
-│   └── bmad-shard/SKILL.md        # Shard Utility
+│   ├── bmad-shard/SKILL.md        # Shard Utility
+│   └── bmad-skills/SKILL.md       # Skills Discovery & Security Gate
 ├── commands/
 │   └── bmad.md
 ├── resources/
 │   ├── soul.md                    # Shared circle principles
 │   ├── governance-protocol.md     # Dynamic governance protocol
+│   ├── skill-security-criteria.md # Security criteria for external skills
 │   ├── templates/
 │   │   ├── config-example.yaml    # Per-project config template
 │   │   ├── software/

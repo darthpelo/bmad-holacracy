@@ -60,5 +60,10 @@ Read the BMAD circle principles from `${CLAUDE_PLUGIN_ROOT}/resources/soul.md` t
    5. /bmad-qa -> validate
    ```
 
-5. **Confirm**:
+5. **Suggest external skills** (optional):
+   "Want to explore community skills from skills.sh for your [domain] project? (y/n)"
+   - If yes: suggest user invokes `/bmad-skills`
+   - If no: proceed without external skills
+
+6. **Confirm**:
    "BMAD circle initialized for domain: <domain>. Start with: /bmad-scope"
