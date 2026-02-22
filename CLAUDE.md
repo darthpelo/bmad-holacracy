@@ -53,6 +53,7 @@ Utilities: `/bmad-init`, `/bmad-shard`, `/bmad-skills`
 - Git rebase continue: use `GIT_EDITOR=true git rebase --continue` (no `--no-edit` flag exists for rebase)
 - **Dynamic Governance**: all 8 agent roles have a `## Tension Sensing` block that references `governance-protocol.md`. Orchestrators have a `## Temporary Roles` section. New roles can be proposed, approved, used temporarily, and promoted to permanent SKILL.md files.
 - **Skills.sh Integration**: `/bmad-skills` discovers and installs external skills from skills.sh with a mandatory security gate. Security criteria in `resources/skill-security-criteria.md`. Verdicts: PASS (low risk), WARN (medium), BLOCK (high — hard stop). `/bmad-init` suggests external skills after domain detection.
+- **Swift Skills Integration**: For Swift projects (`Package.swift`, `*.xcodeproj`), BMAD roles suggest invoking external Swift expert skills. `bmad-init` suggests installation, `bmad-arch` suggests `/swift-concurrency` and `/swiftui-expert` for architecture, `bmad-impl` suggests contextual skills during implementation, `bmad-qa` suggests `/swift-testing-expert` for test quality. Skills are standalone plugins (AvdLee repos), not bundled. Graceful degradation if not installed.
 
 ## Testing / Validation
 - `claude --plugin-dir ./claude-plugin-bmad` — local dev testing
@@ -77,6 +78,11 @@ Utilities: `/bmad-init`, `/bmad-shard`, `/bmad-skills`
 - Check bmad-skills uses context same: `grep -q "context: same" skills/bmad-skills/SKILL.md && echo OK`
 - Check security criteria has required sections: `grep -c "PASS\|WARN\|BLOCK\|Patterns to Flag\|Report Format" resources/skill-security-criteria.md` (should be 5+)
 - Check bmad-init references bmad-skills: `grep -q "bmad-skills" skills/bmad-init/SKILL.md && echo OK`
+- Check Swift detection in domain blocks: `grep -l "Package.swift" skills/bmad-*/SKILL.md | wc -l` (should be 12)
+- Check bmad-init Swift skill suggestions: `grep -q "SwiftUI Expert" skills/bmad-init/SKILL.md && echo OK`
+- Check bmad-impl Swift recommendations: `grep -q "Swift Skill Recommendations" skills/bmad-impl/SKILL.md && echo OK`
+- Check bmad-arch Swift guidance: `grep -q "Swift Architecture Guidance" skills/bmad-arch/SKILL.md && echo OK`
+- Check bmad-qa Swift Testing: `grep -q "Swift Testing Recommendations" skills/bmad-qa/SKILL.md && echo OK`
 
 ## Related Repositories
 - Company version (holacracy, quality gates): github.com/alessioroberto82/claude-plugin-bmad

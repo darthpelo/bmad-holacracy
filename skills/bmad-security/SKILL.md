@@ -27,7 +27,7 @@ If no config file exists, use default behavior.
 ## Domain Detection
 
 Detect the project domain by analyzing files in the current directory:
-- **software**: if `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
+- **software**: if `Package.swift`, `*.xcodeproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Cargo.toml` exists
 - **business**: if `business-plan.md`, `market-analysis.md`, `strategy.md` exists
 - **personal**: if `goals.md`, `journal.md`, or `habits/` folder exists
 - **general**: default if no indicator found
