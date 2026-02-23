@@ -14,12 +14,12 @@
     "bmad-master.agent.yaml": "1304c1cc921a8ea633d10241263bc0c625e3137e"
   },
   "src/core/tasks": {
-    "editorial-review-prose.xml": "deb53570e817d22b8765804cbd283c62294f1870",
-    "editorial-review-structure.xml": "426dc3c8c533083da9c65746e8b61b85e5682ef0",
-    "help.md": "c3c3fab112caa7fe86219c81b4c34b880f539de3",
-    "index-docs.xml": "30e0609211ba784be535a8a3f3611d8e7fc73cff",
-    "review-adversarial-general.xml": "421719bb52721e53d11ce69fd9260b180ab4d7de",
-    "shard-doc.xml": "1dc8fe80e9a2569da90b57678fb9c0bf807c5811",
+    "editorial-review-prose.xml": "1f26c34d8450cf8ec69e18066485c00c5a7dbde0",
+    "editorial-review-structure.xml": "4d52d3c082f349eb3c67907449b33bbec1ba0c6e",
+    "help.md": "0d72da6c6b432208de7ab47c6fddc73cc277bb35",
+    "index-docs.xml": "d4d7c0811fe72ad0e3a0b42b5a253c0da180c872",
+    "review-adversarial-general.xml": "52e5b17feea165ed8f0ddc47e5bea187465b94c5",
+    "shard-doc.xml": "c8705555b1317fd3cc72d3f3424537583644145b",
     "workflow.xml": "536c9d8e7f70bd1d1dfa4b6634658d8730a50900"
   },
   "src/bmm/data": {
