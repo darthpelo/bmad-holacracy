@@ -1,0 +1,13 @@
+{
+  "name": "bmad-method",
+  "owner": {
+    "name": "Alessio Roberto"
+  },
+  "plugins": [
+    {
+      "name": "bmad-method",
+      "source": "./",
+      "description": "BMAD-METHOD: Holacracy-inspired AI circle for structured project workflows"
+    }
+  ]
+}
