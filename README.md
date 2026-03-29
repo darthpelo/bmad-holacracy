@@ -317,9 +317,7 @@ claude-plugin-bmad/
 │       └── detect_domain.sh
 ├── .github/
 │   ├── workflows/
-│   │   └── upstream-sync.yml      # Weekly upstream BMAD-METHOD sync monitor
-│   ├── upstream-mapping.json      # Upstream agent → local skill mapping
-│   ├── upstream-snapshot.json     # SHA snapshot of upstream files
+│   │   └── upstream-sync.yml      # Weekly upstream BMAD-METHOD release notification
 │   └── upstream-version.txt       # Last synced upstream version
 ├── README.md
 └── LICENSE

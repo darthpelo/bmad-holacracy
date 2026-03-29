@@ -15,9 +15,7 @@ No build step, no npm, no traditional tests. All content is Markdown.
 - `resources/templates/config-example.yaml` — per-project config template
 - `.claude-plugin/plugin.json` — plugin manifest
 - `docs/CUSTOMIZATION.md` — contributor guide with templates
-- `.github/workflows/upstream-sync.yml` — weekly upstream BMAD-METHOD sync monitor
-- `.github/upstream-mapping.json` — upstream agent → local skill mapping (agents in TWO upstream dirs: `src/bmm/agents/` + `src/core/agents/`)
-- `.github/upstream-snapshot.json` — SHA snapshot of upstream files (auto-updated by Action)
+- `.github/workflows/upstream-sync.yml` — weekly upstream BMAD-METHOD release notification
 - `.github/upstream-version.txt` — last synced upstream version (auto-updated by Action)
 
 ## Holacracy Model
